@@ -26,3 +26,7 @@ charts/
 # OS
 .DS_Store
 Thumbs.db
+
+# Local proxy tooling (не коммитим)
+proxies.txt
+check_*.py
