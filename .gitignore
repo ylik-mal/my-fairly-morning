@@ -1,0 +1,28 @@
+# Токены и секреты
+.env
+
+# Виртуальное окружение
+venv/
+.venv/
+env/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# База данных
+*.db
+*.sqlite3
+
+# Сгенерированные графики
+*.png
+charts/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
