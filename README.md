@@ -16,3 +16,6 @@ Telegram-бот для хорошего начала дня, отслежива�
 
 ## Запуск
 (будет добавлено позже)
+
+## Roadmap
+See [ROADMAP.md](ROADMAP.md) for the development plan.
