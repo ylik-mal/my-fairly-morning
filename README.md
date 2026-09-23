@@ -21,7 +21,6 @@ Telegram-бот для хорошего начала дня, отслежива�
 See [ROADMAP.md](ROADMAP.md) for the development plan.
 
 ## Работа через прокси
-
 В регионах, где `api.telegram.org` недоступен, бот поддерживает работу через SOCKS5-прокси. Укажите прокси в `main.py`:
 
 ```python
