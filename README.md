@@ -9,7 +9,7 @@ Telegram-бот для хорошего начала дня, отслежива�
 - бонус (ввиде печеньки с предсказанием)
 
 ## Стек
-- Python 3.14.5
+- Python 3.12
 - aiogram 3.x
 - SQLite
 - matplotlib
@@ -19,3 +19,10 @@ Telegram-бот для хорошего начала дня, отслежива�
 
 ## Roadmap
 See [ROADMAP.md](ROADMAP.md) for the development plan.
+
+## Работа через прокси
+
+В регионах, где `api.telegram.org` недоступен, бот поддерживает работу через SOCKS5-прокси. Укажите прокси в `main.py`:
+
+```python
+session = AiohttpSession(proxy="socks5://IP:PORT")
