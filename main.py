@@ -9,6 +9,8 @@ from aiogram.enums import ParseMode
 from app.config import BOT_TOKEN
 from app.handlers import start as start_handler
 
+from app.database.db import init_db
+
 
 logging.basicConfig(
     level=logging.INFO,
@@ -26,6 +28,8 @@ async def main() -> None:
     dp = Dispatcher()
 
     dp.include_router(start_handler.router)
+
+    await init_db()
 
     logging.info("Бот запущен")
 
