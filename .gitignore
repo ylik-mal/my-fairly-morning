@@ -30,3 +30,17 @@ Thumbs.db
 # Local proxy tooling (не коммитим)
 proxies.txt
 check_*.py
+
+# Логи
+*.log
+logs/
+
+# Кэш pytest
+.pytest_cache/
+
+# Локальные скрипты для прокси
+proxies.txt
+check_*.py
+
+# Файлы IDE
+*.swp
