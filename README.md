@@ -25,3 +25,10 @@ See [ROADMAP.md](ROADMAP.md) for the development plan.
 
 ```python
 session = AiohttpSession(proxy="socks5://IP:PORT")
+
+## Текущий статус
+
+- ✅ Foundation (aiogram, /start)
+- ✅ SQLite database (users, habits)
+- 🚧 Commands for habits (in progress)
+- 📅 Reminders, statistics, charts
