@@ -8,6 +8,7 @@ from aiogram.enums import ParseMode
 
 from app.config import BOT_TOKEN
 from app.handlers import start as start_handler
+from app.handlers import habits as habits_handler
 
 from app.database.db import init_db
 
@@ -28,6 +29,7 @@ async def main() -> None:
     dp = Dispatcher()
 
     dp.include_router(start_handler.router)
+    dp.include_router(habits_handler.router)
 
     await init_db()
 
