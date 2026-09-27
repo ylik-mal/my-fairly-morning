@@ -1,4 +1,5 @@
 import aiosqlite
+from datetime import date as date_module
 
 from app.config import DB_PATH
 
@@ -30,6 +31,21 @@ async def init_db() -> None:
             """
         )
 
+        await db.execute(
+            """
+            CREATE TABLE IF NOT EXISTS checkins (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                habit_id INTEGER NOT NULL,
+                user_id INTEGER NOT NULL,
+                date TEXT NOT NULL,
+                status TEXT NOT NULL CHECK (status IN ('done', 'skipped')),
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                UNIQUE (habit_id, user_id, date),
+                FOREIGN KEY (habit_id) REFERENCES habits (id) ON DELETE CASCADE
+            )
+            """
+        )
+
         await db.commit()
 
 
@@ -49,6 +65,7 @@ async def get_or_create_user(
         )
         await db.commit()
 
+
 async def add_habit(telegram_id: int, title: str) -> None:
     """Добавляет привычку пользователю."""
     async with aiosqlite.connect(DB_PATH) as db:
@@ -67,3 +84,31 @@ async def get_user_habits(telegram_id: int) -> list[tuple[int, str]]:
             (telegram_id,),
         ) as cursor:
             return await cursor.fetchall()
+
+
+async def set_checkin(habit_id: int, user_id: int, status: str) -> None:
+    """Отмечает привычку как выполненную или пропущенную на сегодня."""
+    today = date_module.today().isoformat()
+    async with aiosqlite.connect(DB_PATH) as db:
+        await db.execute(
+            """
+            INSERT INTO checkins (habit_id, user_id, date, status)
+            VALUES (?, ?, ?, ?)
+            ON CONFLICT (habit_id, user_id, date)
+            DO UPDATE SET status = excluded.status
+            """,
+            (habit_id, user_id, today, status),
+        )
+        await db.commit()
+
+
+async def get_today_checkins(user_id: int) -> dict[int, str]:
+    """Возвращает dict {habit_id: status} за сегодня."""
+    today = date_module.today().isoformat()
+    async with aiosqlite.connect(DB_PATH) as db:
+        async with db.execute(
+            "SELECT habit_id, status FROM checkins WHERE user_id = ? AND date = ?",
+            (user_id, today),
+        ) as cursor:
+            rows = await cursor.fetchall()
+            return {habit_id: status for habit_id, status in rows}
