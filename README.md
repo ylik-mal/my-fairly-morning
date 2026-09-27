@@ -2,12 +2,13 @@
 Telegram-бот для хорошего начала дня, отслеживания привычек и саморефлексии.
 
 ## Возможности
+
 - ✅ Добавление привычек (`/add_habit`)
 - ✅ Просмотр списка привычек (`/my_habits`)
-- 🚧 Утренний чек-лист привычек (в разработке)
+- ✅ Ежедневные отметки (`/today` с кнопками «Сделано / Пропустить»)
+- 🚧 Утренние напоминания (в разработке)
 - 📅 Вечерняя рефлексия
-- 📅 Визуализация прогресса
-- 📅 Бонус (печенька с предсказанием)
+- 📅 Статистика и графики
 
 ## Стек
 - Python 3.12
@@ -29,7 +30,9 @@ session = AiohttpSession(proxy="socks5://IP:PORT")
 
 ## Текущий статус
 
-- ✅ Foundation (aiogram, /start)
-- ✅ SQLite database (users, habits)
-- 🚧 Commands for habits (in progress)
-- 📅 Reminders, statistics, charts
+- ✅ Foundation (aiogram, `/start`)
+- ✅ SQLite database (users, habits, checkins)
+- ✅ Habit management (`/add_habit`, `/my_habits`)
+- ✅ Daily check-ins (`/today` with inline buttons)
+- 🚧 Morning reminders (in progress)
+- 📅 Statistics, charts, deployment (planned)
