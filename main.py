@@ -7,11 +7,12 @@ from aiogram.client.session.aiohttp import AiohttpSession
 from aiogram.enums import ParseMode
 
 from app.config import BOT_TOKEN
+from app.database.db import init_db
 from app.handlers import start as start_handler
 from app.handlers import habits as habits_handler
 from app.handlers import checkins as checkins_handler
-
-from app.database.db import init_db
+from app.handlers import settings as settings_handler
+from app.scheduler.runner import start_scheduler
 
 
 logging.basicConfig(
@@ -21,7 +22,7 @@ logging.basicConfig(
 
 
 async def main() -> None:
-    session = AiohttpSession(proxy="socks5://185.87.255.54:1080")
+    session = AiohttpSession(proxy="socks5://89.19.215.51:7687")
     bot = Bot(
         token=BOT_TOKEN,
         session=session,
@@ -32,8 +33,11 @@ async def main() -> None:
     dp.include_router(start_handler.router)
     dp.include_router(habits_handler.router)
     dp.include_router(checkins_handler.router)
+    dp.include_router(settings_handler.router)
 
     await init_db()
+
+    start_scheduler(bot)
 
     logging.info("Бот запущен")
 
