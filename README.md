@@ -5,9 +5,9 @@ Telegram-бот для хорошего начала дня, отслежива�
 
 - ✅ Добавление привычек (`/add_habit`)
 - ✅ Просмотр списка привычек (`/my_habits`)
-- ✅ Ежедневные отметки (`/today` с кнопками «Сделано / Пропустить»)
-- 🚧 Утренние напоминания (в разработке)
-- 📅 Вечерняя рефлексия
+- ✅ Ежедневные отметки (`/today` с кнопками)
+- ✅ Утренний дайджест (`/set_morning HH:MM`)
+- 🚧 Вечерняя рефлексия (в разработке)
 - 📅 Статистика и графики
 
 ## Стек
@@ -28,11 +28,12 @@ See [ROADMAP.md](ROADMAP.md) for the development plan.
 ```python
 session = AiohttpSession(proxy="socks5://IP:PORT")
 
-## Текущий статус
+### Текущий статус
 
 - ✅ Foundation (aiogram, `/start`)
-- ✅ SQLite database (users, habits, checkins)
+- ✅ SQLite database (users, habits, checkins, user_settings)
 - ✅ Habit management (`/add_habit`, `/my_habits`)
 - ✅ Daily check-ins (`/today` with inline buttons)
-- 🚧 Morning reminders (in progress)
+- ✅ Morning digest (APScheduler, `/set_morning`)
+- 🚧 Evening reflection (in progress)
 - 📅 Statistics, charts, deployment (planned)
