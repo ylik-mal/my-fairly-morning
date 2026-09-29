@@ -46,6 +46,33 @@ async def init_db() -> None:
             """
         )
 
+        await db.execute(
+            """
+            CREATE TABLE IF NOT EXISTS user_settings (
+                user_id INTEGER PRIMARY KEY,
+                morning_time TEXT,
+                evening_time TEXT,
+                FOREIGN KEY (user_id) REFERENCES users (telegram_id) ON DELETE CASCADE
+            )
+            """
+        )
+
+        await db.execute(
+            """
+            CREATE TABLE IF NOT EXISTS reflections (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER NOT NULL,
+                date TEXT NOT NULL,
+                rating INTEGER,
+                success TEXT,
+                failure TEXT,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                UNIQUE (user_id, date),
+                FOREIGN KEY (user_id) REFERENCES users (telegram_id) ON DELETE CASCADE
+            )
+            """
+        )
+
         await db.commit()
 
 
@@ -112,3 +139,83 @@ async def get_today_checkins(user_id: int) -> dict[int, str]:
         ) as cursor:
             rows = await cursor.fetchall()
             return {habit_id: status for habit_id, status in rows}
+
+
+async def set_morning_time(user_id: int, time_str: str) -> None:
+    """Сохраняет время утреннего дайджеста для пользователя."""
+    async with aiosqlite.connect(DB_PATH) as db:
+        await db.execute(
+            """
+            INSERT INTO user_settings (user_id, morning_time)
+            VALUES (?, ?)
+            ON CONFLICT (user_id)
+            DO UPDATE SET morning_time = excluded.morning_time
+            """,
+            (user_id, time_str),
+        )
+        await db.commit()
+
+
+async def get_morning_time(user_id: int) -> str | None:
+    """Возвращает время утреннего дайджеста или None."""
+    async with aiosqlite.connect(DB_PATH) as db:
+        async with db.execute(
+            "SELECT morning_time FROM user_settings WHERE user_id = ?",
+            (user_id,),
+        ) as cursor:
+            row = await cursor.fetchone()
+            return row[0] if row else None
+
+
+async def get_users_with_morning_time(time_str: str) -> list[int]:
+    """Возвращает user_id всех, у кого утреннее время = time_str (HH:MM)."""
+    async with aiosqlite.connect(DB_PATH) as db:
+        async with db.execute(
+            "SELECT user_id FROM user_settings WHERE morning_time = ?",
+            (time_str,),
+        ) as cursor:
+            rows = await cursor.fetchall()
+            return [row[0] for row in rows]
+
+
+async def save_reflection(
+    user_id: int,
+    rating: int | None,
+    success: str | None,
+    failure: str | None,
+) -> None:
+    """Сохраняет вечернюю рефлексию. Если за сегодня уже есть — обновляет."""
+    today = date_module.today().isoformat()
+    async with aiosqlite.connect(DB_PATH) as db:
+        await db.execute(
+            """
+            INSERT INTO reflections (user_id, date, rating, success, failure)
+            VALUES (?, ?, ?, ?, ?)
+            ON CONFLICT (user_id, date)
+            DO UPDATE SET
+                rating = excluded.rating,
+                success = excluded.success,
+                failure = excluded.failure
+            """,
+            (user_id, today, rating, success, failure),
+        )
+        await db.commit()
+
+
+async def get_recent_reflections(
+    user_id: int,
+    limit: int = 7,
+) -> list[tuple[str, int | None, str | None, str | None]]:
+    """Возвращает последние рефлексии: [(date, rating, success, failure), ...]."""
+    async with aiosqlite.connect(DB_PATH) as db:
+        async with db.execute(
+            """
+            SELECT date, rating, success, failure
+            FROM reflections
+            WHERE user_id = ?
+            ORDER BY date DESC
+            LIMIT ?
+            """,
+            (user_id, limit),
+        ) as cursor:
+            return await cursor.fetchall()
