@@ -22,7 +22,7 @@ logging.basicConfig(
 
 
 async def main() -> None:
-    session = AiohttpSession(proxy="socks5://89.19.215.51:7687")
+    session = AiohttpSession(proxy="socks5://185.195.71.218:18080")
     bot = Bot(
         token=BOT_TOKEN,
         session=session,
