@@ -14,6 +14,7 @@ from app.handlers import checkins as checkins_handler
 from app.handlers import settings as settings_handler
 from app.scheduler.runner import start_scheduler
 from app.handlers import help as help_handler
+from app.handlers import reflection as reflection_handler
 
 logging.basicConfig(
     level=logging.INFO,
@@ -35,6 +36,7 @@ async def main() -> None:
     dp.include_router(checkins_handler.router)
     dp.include_router(settings_handler.router)
     dp.include_router(help_handler.router)
+    dp.include_router(reflection_handler.router)
 
     await init_db()
 
