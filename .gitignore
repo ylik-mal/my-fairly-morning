@@ -44,3 +44,6 @@ check_*.py
 
 # Файлы IDE
 *.swp
+
+# Случайные файлы
+Activate.ps1
