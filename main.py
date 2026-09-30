@@ -40,7 +40,7 @@ async def main() -> None:
 
     await init_db()
 
-    start_scheduler(bot)
+    start_scheduler(bot, dp)
 
     logging.info("Бот запущен")
 

@@ -219,3 +219,39 @@ async def get_recent_reflections(
             (user_id, limit),
         ) as cursor:
             return await cursor.fetchall()
+
+async def set_evening_time(user_id: int, time_str: str) -> None:
+    """Сохраняет время вечерней рефлексии для пользователя."""
+    async with aiosqlite.connect(DB_PATH) as db:
+        await db.execute(
+            """
+            INSERT INTO user_settings (user_id, evening_time)
+            VALUES (?, ?)
+            ON CONFLICT (user_id)
+            DO UPDATE SET evening_time = excluded.evening_time
+            """,
+            (user_id, time_str),
+        )
+        await db.commit()
+
+
+async def get_evening_time(user_id: int) -> str | None:
+    """Возвращает время вечерней рефлексии или None."""
+    async with aiosqlite.connect(DB_PATH) as db:
+        async with db.execute(
+            "SELECT evening_time FROM user_settings WHERE user_id = ?",
+            (user_id,),
+        ) as cursor:
+            row = await cursor.fetchone()
+            return row[0] if row else None
+
+
+async def get_users_with_evening_time(time_str: str) -> list[int]:
+    """Возвращает user_id всех, у кого вечернее время = time_str (HH:MM)."""
+    async with aiosqlite.connect(DB_PATH) as db:
+        async with db.execute(
+            "SELECT user_id FROM user_settings WHERE evening_time = ?",
+            (time_str,),
+        ) as cursor:
+            rows = await cursor.fetchall()
+            return [row[0] for row in rows]
