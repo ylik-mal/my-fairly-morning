@@ -4,7 +4,7 @@ from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.types import Message
 
-from app.database.db import save_reflection
+from app.database.db import get_recent_reflections, save_reflection
 
 
 router = Router()
@@ -77,3 +77,32 @@ async def process_failure(message: Message, state: FSMContext) -> None:
         "✅ <b>Спасибо! Рефлексия сохранена.</b>\n\n"
         "Посмотреть историю: /my_reflections (скоро)"
     )
+@router.message(Command("my_reflections"))
+async def cmd_my_reflections(message: Message) -> None:
+    reflections = await get_recent_reflections(message.from_user.id, limit=7)
+
+    if not reflections:
+        await message.answer(
+            "У тебя пока нет рефлексий.\n\n"
+            "Начни первую: /reflect"
+        )
+        return
+
+    lines = ["📓 <b>Последние рефлексии:</b>\n"]
+
+    for date_str, rating, success, failure in reflections:
+        # date_str в формате 2026-09-30 → 30.09.2026
+        year, month, day = date_str.split("-")
+        pretty_date = f"{day}.{month}.{year}"
+
+        rating_str = f"{rating}/10" if rating is not None else "—"
+        success_str = success or "—"
+        failure_str = failure or "—"
+
+        lines.append(
+            f"📅 <b>{pretty_date}</b> — Оценка: {rating_str}\n"
+            f"✅ Удалось: {success_str}\n"
+            f"❌ Не получилось: {failure_str}\n"
+        )
+
+    await message.answer("\n".join(lines))
