@@ -1,8 +1,9 @@
 from aiogram import Router
 from aiogram.filters import Command
-from aiogram.types import Message
+from aiogram.types import BufferedInputFile, Message
 
 from app.database.db import get_habits_stats
+from app.utils.charts import generate_chart
 
 
 router = Router()
@@ -45,3 +46,26 @@ async def cmd_stats(message: Message) -> None:
     lines.append(f"\n<b>Всего выполнений:</b> {total_done}")
 
     await message.answer("\n".join(lines))
+
+    
+    
+@router.message(Command("chart"))
+async def cmd_chart(message: Message) -> None:
+    buffer = await generate_chart(message.from_user.id, days=7)
+
+    if buffer is None:
+        await message.answer(
+            "Нет данных для графика.\n\n"
+            "Сначала добавь привычки и отметь их через /today."
+        )
+        return
+
+    photo = BufferedInputFile(
+        buffer.read(),
+        filename="chart.png",
+    )
+
+    await message.answer_photo(
+        photo=photo,
+        caption="📊 <b>Твоя статистика за 7 дней</b>",
+    )
