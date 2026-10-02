@@ -19,6 +19,8 @@ async def cmd_help(message: Message) -> None:
         "/morning — текущее время дайджеста\n\n"
         "🌙 <b>Рефлексия:</b>\n"
         "/reflect — начать вечернюю рефлексию\n"
+        "📊 <b>Аналитика:</b>\n"
+        "/stats — статистика за 7 дней\n\n"
         "/set_evening <i>HH:MM</i> — время вечернего опроса\n"
         "/evening — текущее время опроса\n"
         "/my_reflections — история рефлексий\n\n"

@@ -1,5 +1,5 @@
 import aiosqlite
-from datetime import date as date_module
+from datetime import date as date_module, timedelta
 
 from app.config import DB_PATH
 
@@ -255,3 +255,54 @@ async def get_users_with_evening_time(time_str: str) -> list[int]:
         ) as cursor:
             rows = await cursor.fetchall()
             return [row[0] for row in rows]
+
+
+
+async def get_habits_stats(user_id: int, days: int = 7) -> list[dict]:
+    """Возвращает статистику по каждой привычке за последние N дней."""
+    today = date_module.today()
+    start_date = (today - timedelta(days=days - 1)).isoformat()
+
+    async with aiosqlite.connect(DB_PATH) as db:
+        # Все привычки пользователя
+        async with db.execute(
+            "SELECT id, title FROM habits WHERE user_id = ? ORDER BY id",
+            (user_id,),
+        ) as cursor:
+            habits = await cursor.fetchall()
+
+        result = []
+
+        for habit_id, title in habits:
+            # Сколько раз выполнено за период
+            async with db.execute(
+                """
+                SELECT COUNT(*) FROM checkins
+                WHERE user_id = ? AND habit_id = ?
+                  AND status = 'done' AND date >= ?
+                """,
+                (user_id, habit_id, start_date),
+            ) as cursor:
+                row = await cursor.fetchone()
+                done_count = row[0] if row else 0
+
+            # Сколько раз пропущено
+            async with db.execute(
+                """
+                SELECT COUNT(*) FROM checkins
+                WHERE user_id = ? AND habit_id = ?
+                  AND status = 'skipped' AND date >= ?
+                """,
+                (user_id, habit_id, start_date),
+            ) as cursor:
+                row = await cursor.fetchone()
+                skipped_count = row[0] if row else 0
+
+            result.append({
+                "title": title,
+                "done": done_count,
+                "skipped": skipped_count,
+                "days": days,
+            })
+
+        return result
