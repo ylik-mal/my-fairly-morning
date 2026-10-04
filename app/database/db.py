@@ -306,3 +306,13 @@ async def get_habits_stats(user_id: int, days: int = 7) -> list[dict]:
             })
 
         return result
+
+async def is_new_user(telegram_id: int) -> bool:
+    """True, если у пользователя ещё нет ни одной привычки."""
+    async with aiosqlite.connect(DB_PATH) as db:
+        async with db.execute(
+            "SELECT COUNT(*) FROM habits WHERE user_id = ?",
+            (telegram_id,),
+        ) as cursor:
+            row = await cursor.fetchone()
+            return (row[0] if row else 0) == 0
