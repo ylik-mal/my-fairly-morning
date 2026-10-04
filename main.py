@@ -26,7 +26,7 @@ logging.basicConfig(
 
 
 async def main() -> None:
-    session = AiohttpSession(proxy="socks5://185.195.71.218:18080")
+    session = AiohttpSession(proxy="socks5://186.246.31.197:9050")
     bot = Bot(
         token=BOT_TOKEN,
         session=session,
@@ -57,7 +57,8 @@ async def main() -> None:
         BotCommand(command="reflect", description="📝 Начать вечернюю рефлексию"),
         BotCommand(command="my_reflections", description="📓 История рефлексий"),
         BotCommand(command="stats", description="📊 Статистика за 7 дней"),
-])
+        BotCommand(command="chart", description="📈 График за 7 дней"),          # ← новое
+    ])
 
     start_scheduler(bot, dp)
 
