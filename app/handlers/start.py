@@ -1,15 +1,15 @@
 from aiogram import F, Router
 from aiogram.filters import CommandStart
-from aiogram.types import CallbackQuery, InlineKeyboardButton, Message
+from aiogram.types import CallbackQuery, Message
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
-from app.database.db import get_or_create_user, is_new_user
+from app.database.db import get_or_create_user, get_user_habits, is_new_user
 
 
 router = Router()
 
 
-def welcome_keyboard() -> InlineKeyboardButton:
+def welcome_keyboard():
     """Кнопки быстрого доступа для приветствия."""
     builder = InlineKeyboardBuilder()
     builder.button(text="➕ Добавить привычку", callback_data="welcome:add")
@@ -75,8 +75,6 @@ async def welcome_add(callback: CallbackQuery) -> None:
 
 @router.callback_query(F.data == "welcome:list")
 async def welcome_list(callback: CallbackQuery) -> None:
-    from app.database.db import get_user_habits
-
     habits = await get_user_habits(callback.from_user.id)
 
     if not habits:
