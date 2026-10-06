@@ -11,7 +11,6 @@ def habits_keyboard(
 
     for habit_id, title in habits:
         status = checkins.get(habit_id)
-
         if status == "done":
             prefix = "✅"
         elif status == "skipped":
@@ -19,8 +18,10 @@ def habits_keyboard(
         else:
             prefix = "⭕"
 
+        short_title = title if len(title) <= 20 else title[:19] + "…"   # ← новая строка
+
         builder.button(
-            text=f"{prefix} {title}",
+            text=f"{prefix} {short_title}",                             # ← изменил title на short_title
             callback_data=f"checkin:{habit_id}",
         )
 
