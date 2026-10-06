@@ -3,12 +3,12 @@
 Telegram-бот для отслеживания привычек и вечерней рефлексии.
 
 <p align="center">
-  <img src="docs/screenshots/02_start.png" width="300" alt="Старт"/>
-  <img src="docs/screenshots/03_today.png" width="300" alt="Сегодня"/>
+  <img src="docs/screenshots/02_start.jpg" width="280" alt="Старт"/>
+  <img src="docs/screenshots/03_today.jpg" width="280" alt="Сегодня"/>
 </p>
 
 <p align="center">
-  <img src="docs/screenshots/04_chart.png" width="500" alt="График"/>
+  <img src="docs/screenshots/04_chart.jpg" width="500" alt="График"/>
 </p>
 
 ## Возможности
@@ -25,7 +25,7 @@ Telegram-бот для отслеживания привычек и вечерн
 ## Меню команд
 
 <p align="center">
-  <img src="docs/screenshots/01_menu.png" width="300" alt="Меню"/>
+  <img src="docs/screenshots/01_menu.jpg" width="300" alt="Меню"/>
 </p>
 
 ## Стек
