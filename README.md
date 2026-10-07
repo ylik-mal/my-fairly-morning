@@ -1,3 +1,5 @@
+[![Tests](https://github.com/ylik-mal/my-fairly-morning/actions/workflows/tests.yml/badge.svg)](https://github.com/ylik-mal/my-fairly-morning/actions/workflows/tests.yml)
+
 # My Fairly Morning 🌅
 
 Telegram-бот для отслеживания привычек и вечерней рефлексии.
