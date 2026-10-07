@@ -47,3 +47,6 @@ check_*.py
 
 # Случайные файлы
 Activate.ps1
+
+# Pytest
+.pytest_cache/

@@ -8,4 +8,4 @@ BOT_TOKEN: str = os.getenv("BOT_TOKEN", "")
 if not BOT_TOKEN:
     raise ValueError("BOT_TOKEN не найден в .env файле")
 
-DB_PATH: str = "bot.db"
+DB_PATH: str = os.getenv("DB_PATH", "bot.db")
