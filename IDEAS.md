@@ -18,3 +18,4 @@
 - [ ] Deploy на VPS (24/7)
 - [ ] GitHub Actions (автотесты)
 - [ ] Docker
+- [ ] `/menu` с inline-кнопками и разделами (6 разделов) — день 17
