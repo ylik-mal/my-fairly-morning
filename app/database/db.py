@@ -73,6 +73,16 @@ async def init_db() -> None:
             """
         )
 
+        await db.execute(
+            """
+            CREATE TABLE IF NOT EXISTS user_word_topic (
+                user_id INTEGER PRIMARY KEY,
+                topic TEXT NOT NULL DEFAULT 'emotions',
+                FOREIGN KEY (user_id) REFERENCES users (telegram_id) ON DELETE CASCADE
+            )
+            """
+        )
+
         await db.commit()
 
 
@@ -178,6 +188,43 @@ async def get_users_with_morning_time(time_str: str) -> list[int]:
             return [row[0] for row in rows]
 
 
+async def set_evening_time(user_id: int, time_str: str) -> None:
+    """Сохраняет время вечерней рефлексии для пользователя."""
+    async with aiosqlite.connect(DB_PATH) as db:
+        await db.execute(
+            """
+            INSERT INTO user_settings (user_id, evening_time)
+            VALUES (?, ?)
+            ON CONFLICT (user_id)
+            DO UPDATE SET evening_time = excluded.evening_time
+            """,
+            (user_id, time_str),
+        )
+        await db.commit()
+
+
+async def get_evening_time(user_id: int) -> str | None:
+    """Возвращает время вечерней рефлексии или None."""
+    async with aiosqlite.connect(DB_PATH) as db:
+        async with db.execute(
+            "SELECT evening_time FROM user_settings WHERE user_id = ?",
+            (user_id,),
+        ) as cursor:
+            row = await cursor.fetchone()
+            return row[0] if row else None
+
+
+async def get_users_with_evening_time(time_str: str) -> list[int]:
+    """Возвращает user_id всех, у кого вечернее время = time_str (HH:MM)."""
+    async with aiosqlite.connect(DB_PATH) as db:
+        async with db.execute(
+            "SELECT user_id FROM user_settings WHERE evening_time = ?",
+            (time_str,),
+        ) as cursor:
+            rows = await cursor.fetchall()
+            return [row[0] for row in rows]
+
+
 async def save_reflection(
     user_id: int,
     rating: int | None,
@@ -220,43 +267,6 @@ async def get_recent_reflections(
         ) as cursor:
             return await cursor.fetchall()
 
-async def set_evening_time(user_id: int, time_str: str) -> None:
-    """Сохраняет время вечерней рефлексии для пользователя."""
-    async with aiosqlite.connect(DB_PATH) as db:
-        await db.execute(
-            """
-            INSERT INTO user_settings (user_id, evening_time)
-            VALUES (?, ?)
-            ON CONFLICT (user_id)
-            DO UPDATE SET evening_time = excluded.evening_time
-            """,
-            (user_id, time_str),
-        )
-        await db.commit()
-
-
-async def get_evening_time(user_id: int) -> str | None:
-    """Возвращает время вечерней рефлексии или None."""
-    async with aiosqlite.connect(DB_PATH) as db:
-        async with db.execute(
-            "SELECT evening_time FROM user_settings WHERE user_id = ?",
-            (user_id,),
-        ) as cursor:
-            row = await cursor.fetchone()
-            return row[0] if row else None
-
-
-async def get_users_with_evening_time(time_str: str) -> list[int]:
-    """Возвращает user_id всех, у кого вечернее время = time_str (HH:MM)."""
-    async with aiosqlite.connect(DB_PATH) as db:
-        async with db.execute(
-            "SELECT user_id FROM user_settings WHERE evening_time = ?",
-            (time_str,),
-        ) as cursor:
-            rows = await cursor.fetchall()
-            return [row[0] for row in rows]
-
-
 
 async def get_habits_stats(user_id: int, days: int = 7) -> list[dict]:
     """Возвращает статистику по каждой привычке за последние N дней."""
@@ -264,7 +274,6 @@ async def get_habits_stats(user_id: int, days: int = 7) -> list[dict]:
     start_date = (today - timedelta(days=days - 1)).isoformat()
 
     async with aiosqlite.connect(DB_PATH) as db:
-        # Все привычки пользователя
         async with db.execute(
             "SELECT id, title FROM habits WHERE user_id = ? ORDER BY id",
             (user_id,),
@@ -274,7 +283,6 @@ async def get_habits_stats(user_id: int, days: int = 7) -> list[dict]:
         result = []
 
         for habit_id, title in habits:
-            # Сколько раз выполнено за период
             async with db.execute(
                 """
                 SELECT COUNT(*) FROM checkins
@@ -286,7 +294,6 @@ async def get_habits_stats(user_id: int, days: int = 7) -> list[dict]:
                 row = await cursor.fetchone()
                 done_count = row[0] if row else 0
 
-            # Сколько раз пропущено
             async with db.execute(
                 """
                 SELECT COUNT(*) FROM checkins
@@ -307,15 +314,6 @@ async def get_habits_stats(user_id: int, days: int = 7) -> list[dict]:
 
         return result
 
-async def is_new_user(telegram_id: int) -> bool:
-    """True, если у пользователя ещё нет ни одной привычки."""
-    async with aiosqlite.connect(DB_PATH) as db:
-        async with db.execute(
-            "SELECT COUNT(*) FROM habits WHERE user_id = ?",
-            (telegram_id,),
-        ) as cursor:
-            row = await cursor.fetchone()
-            return (row[0] if row else 0) == 0
 
 async def is_new_user(telegram_id: int) -> bool:
     """True, если у пользователя ещё нет ни одной привычки."""
@@ -326,3 +324,29 @@ async def is_new_user(telegram_id: int) -> bool:
         ) as cursor:
             row = await cursor.fetchone()
             return (row[0] if row else 0) == 0
+
+
+async def set_word_topic(user_id: int, topic: str) -> None:
+    """Сохраняет выбранную тему слова дня."""
+    async with aiosqlite.connect(DB_PATH) as db:
+        await db.execute(
+            """
+            INSERT INTO user_word_topic (user_id, topic)
+            VALUES (?, ?)
+            ON CONFLICT (user_id)
+            DO UPDATE SET topic = excluded.topic
+            """,
+            (user_id, topic),
+        )
+        await db.commit()
+
+
+async def get_word_topic(user_id: int) -> str:
+    """Возвращает выбранную тему или 'emotions' по умолчанию."""
+    async with aiosqlite.connect(DB_PATH) as db:
+        async with db.execute(
+            "SELECT topic FROM user_word_topic WHERE user_id = ?",
+            (user_id,),
+        ) as cursor:
+            row = await cursor.fetchone()
+            return row[0] if row else "emotions"
