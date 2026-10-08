@@ -59,7 +59,9 @@ async def main() -> None:
         BotCommand(command="reflect", description="📝 Начать вечернюю рефлексию"),
         BotCommand(command="my_reflections", description="📓 История рефлексий"),
         BotCommand(command="stats", description="📊 Статистика за 7 дней"),
-        BotCommand(command="chart", description="📈 График за 7 дней"),          # ← новое
+        BotCommand(command="chart", description="📈 График за 7 дней"),
+        BotCommand(command="word", description="📚 Слово дня"),
+        BotCommand(command="topics", description="🎯 Выбрать тему"),          # ← новое
     ])
 
     start_scheduler(bot, dp)

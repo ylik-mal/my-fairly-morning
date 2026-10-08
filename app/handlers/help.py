@@ -27,4 +27,7 @@ async def cmd_help(message: Message) -> None:
         "ℹ️ <b>Прочее:</b>\n"
         "/help — эта справка\n"
         "/start — перезапустить бота"
+        "📚 <b>Развитие:</b>\n"
+        "/word — слово дня\n"
+        "/topics — выбрать тему слов\n"
     )
