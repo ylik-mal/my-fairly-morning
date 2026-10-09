@@ -10,6 +10,8 @@ router = Router()
 async def cmd_help(message: Message) -> None:
     await message.answer(
         "🌅 <b>My Fairly Morning — помощь</b>\n\n"
+        "📋 <b>Главное меню:</b>\n"
+        "/menu — открыть интерактивное меню\n\n"
         "📋 <b>Привычки:</b>\n"
         "/add_habit <i>Название</i> — добавить привычку\n"
         "/my_habits — список привычек\n"

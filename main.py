@@ -17,6 +17,7 @@ from app.handlers import help as help_handler
 from app.handlers import reflection as reflection_handler
 from app.handlers import stats as stats_handler
 from app.handlers import words as words_handler
+from app.handlers import menu as menu_handler
 
 from app.scheduler.runner import start_scheduler
 
@@ -27,7 +28,7 @@ logging.basicConfig(
 
 
 async def main() -> None:
-    session = AiohttpSession(proxy="socks5://186.246.31.197:9050")
+    session = AiohttpSession(proxy="socks5://83.147.217.103:1080")
     bot = Bot(
         token=BOT_TOKEN,
         session=session,
@@ -43,10 +44,12 @@ async def main() -> None:
     dp.include_router(reflection_handler.router)
     dp.include_router(stats_handler.router)
     dp.include_router(words_handler.router)
+    dp.include_router(menu_handler.router)
 
     await init_db()
 
     await bot.set_my_commands([
+        BotCommand(command="menu", description="📋 Главное меню"),
         BotCommand(command="start", description="🏠 Перезапустить бота"),
         BotCommand(command="help", description="❓ Справка по командам"),
         BotCommand(command="add_habit", description="➕ Добавить привычку"),
@@ -61,7 +64,7 @@ async def main() -> None:
         BotCommand(command="stats", description="📊 Статистика за 7 дней"),
         BotCommand(command="chart", description="📈 График за 7 дней"),
         BotCommand(command="word", description="📚 Слово дня"),
-        BotCommand(command="topics", description="🎯 Выбрать тему"),          # ← новое
+        BotCommand(command="topics", description="🎯 Выбрать тему"),
     ])
 
     start_scheduler(bot, dp)
