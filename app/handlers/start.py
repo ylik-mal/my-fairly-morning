@@ -12,6 +12,7 @@ router = Router()
 def welcome_keyboard():
     """Кнопки быстрого доступа для приветствия."""
     builder = InlineKeyboardBuilder()
+    builder.button(text="📋 Открыть меню", callback_data="menu:main")
     builder.button(text="➕ Добавить привычку", callback_data="welcome:add")
     builder.button(text="📋 Мои привычки", callback_data="welcome:list")
     builder.button(text="❓ Помощь", callback_data="welcome:help")

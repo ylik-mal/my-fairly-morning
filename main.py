@@ -18,6 +18,7 @@ from app.handlers import reflection as reflection_handler
 from app.handlers import stats as stats_handler
 from app.handlers import words as words_handler
 from app.handlers import menu as menu_handler
+from app.handlers import menu as menu_handler
 
 from app.scheduler.runner import start_scheduler
 
@@ -28,7 +29,7 @@ logging.basicConfig(
 
 
 async def main() -> None:
-    session = AiohttpSession(proxy="socks5://83.147.217.103:1080")
+    session = AiohttpSession(proxy="socks5://58.186.169.160:1080")
     bot = Bot(
         token=BOT_TOKEN,
         session=session,
