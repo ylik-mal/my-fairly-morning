@@ -7,7 +7,7 @@ from aiogram.client.session.aiohttp import AiohttpSession
 from aiogram.enums import ParseMode
 from aiogram.types import BotCommand
 
-from app.config import BOT_TOKEN
+from app.config import BOT_TOKEN, PROXY
 from app.database.db import init_db
 from app.handlers import start as start_handler
 from app.handlers import habits as habits_handler
@@ -17,7 +17,6 @@ from app.handlers import help as help_handler
 from app.handlers import reflection as reflection_handler
 from app.handlers import stats as stats_handler
 from app.handlers import words as words_handler
-from app.handlers import menu as menu_handler
 from app.handlers import menu as menu_handler
 
 from app.scheduler.runner import start_scheduler
@@ -29,7 +28,7 @@ logging.basicConfig(
 
 
 async def main() -> None:
-    session = AiohttpSession(proxy="socks5://58.186.169.160:1080")
+    session = AiohttpSession(proxy=PROXY) if PROXY else None
     bot = Bot(
         token=BOT_TOKEN,
         session=session,
