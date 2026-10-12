@@ -129,7 +129,136 @@ WORDS_BY_TOPIC = {
             "english": ["enlightenment", "illumination", "realization", "awakening", "clarity"],
         },
     },
-    "character": {},
+        "character": {
+        "добрый": {
+            "synonyms": ["добрый", "сердечный", "душевный", "милосердный", "великодушный"],
+            "english": ["kind", "warm", "caring", "compassionate", "magnanimous"],
+        },
+        "смелый": {
+            "synonyms": ["смелый", "храбрый", "отважный", "бесстрашный", "дерзновенный"],
+            "english": ["brave", "bold", "courageous", "fearless", "audacious"],
+        },
+        "честный": {
+            "synonyms": ["честный", "правдивый", "открытый", "неподкупный", "безупречный"],
+            "english": ["honest", "truthful", "frank", "incorruptible", "upright"],
+        },
+        "скромный": {
+            "synonyms": ["скромный", "сдержанный", "застенчивый", "непритязательный", "деликатный"],
+            "english": ["modest", "humble", "reserved", "unassuming", "reticent"],
+        },
+        "гордый": {
+            "synonyms": ["гордый", "величавый", "величественный", "надменный", "непреклонный"],
+            "english": ["proud", "majestic", "dignified", "lofty", "imperious"],
+        },
+        "упрямый": {
+            "synonyms": ["упрямый", "настойчивый", "непреклонный", "неподатливый", "неуступчивый"],
+            "english": ["stubborn", "persistent", "adamant", "obstinate", "unyielding"],
+        },
+        "ленивый": {
+            "synonyms": ["ленивый", "праздный", "неповоротливый", "бездеятельный", "расслабленный"],
+            "english": ["lazy", "idle", "sluggish", "inactive", "indolent"],
+        },
+        "щедрый": {
+            "synonyms": ["щедрый", "великодушный", "благородный", "расточительный", "безмерный"],
+            "english": ["generous", "openhanded", "bountiful", "lavish", "magnanimous"],
+        },
+        "искренний": {
+            "synonyms": ["искренний", "открытый", "чистосердечный", "правдивый", "неподдельный"],
+            "english": ["sincere", "open", "genuine", "honest", "heartfelt"],
+        },
+        "застенчивый": {
+            "synonyms": ["застенчивый", "робкий", "стеснительный", "неуверенный", "стыдливый"],
+            "english": ["shy", "timid", "bashful", "diffident", "self-conscious"],
+        },
+        "уверенный": {
+            "synonyms": ["уверенный", "твёрдый", "решительный", "несомненный", "бесспорный"],
+            "english": ["confident", "assured", "certain", "determined", "unwavering"],
+        },
+        "надёжный": {
+            "synonyms": ["надёжный", "верный", "проверенный", "прочный", "непоколебимый"],
+            "english": ["reliable", "trustworthy", "dependable", "solid", "steadfast"],
+        },
+        "терпеливый": {
+            "synonyms": ["терпеливый", "выдержанный", "спокойный", "кроткий", "снисходительный"],
+            "english": ["patient", "forbearing", "tolerant", "enduring", "long-suffering"],
+        },
+        "трудолюбивый": {
+            "synonyms": ["трудолюбивый", "работящий", "усердный", "прилежный", "старательный"],
+            "english": ["hardworking", "industrious", "diligent", "assiduous", "studious"],
+        },
+        "внимательный": {
+            "synonyms": ["внимательный", "заботливый", "чуткий", "предупредительный", "участливый"],
+            "english": ["attentive", "caring", "considerate", "thoughtful", "mindful"],
+        },
+        "отзывчивый": {
+            "synonyms": ["отзывчивый", "чуткий", "внимательный", "сердечный", "сочувствующий"],
+            "english": ["responsive", "sympathetic", "kind", "considerate", "warmhearted"],
+        },
+        "справедливый": {
+            "synonyms": ["справедливый", "беспристрастный", "объективный", "непредвзятый", "честный"],
+            "english": ["fair", "just", "impartial", "objective", "equitable"],
+        },
+        "великодушный": {
+            "synonyms": ["великодушный", "благородный", "щедрый", "милосердный", "возвышенный"],
+            "english": ["magnanimous", "noble", "generous", "forgiving", "bighearted"],
+        },
+        "решительный": {
+            "synonyms": ["решительный", "твёрдый", "напористый", "смелый", "бескомпромиссный"],
+            "english": ["decisive", "resolute", "determined", "firm", "uncompromising"],
+        },
+        "спокойный": {
+            "synonyms": ["спокойный", "уравновешенный", "невозмутимый", "хладнокровный", "сдержанный"],
+            "english": ["calm", "poised", "composed", "level-headed", "unflappable"],
+        },
+        "общительный": {
+            "synonyms": ["общительный", "компанейский", "дружелюбный", "открытый", "разговорчивый"],
+            "english": ["sociable", "outgoing", "friendly", "gregarious", "talkative"],
+        },
+        "замкнутый": {
+            "synonyms": ["замкнутый", "нелюдимый", "скрытный", "отчуждённый", "уединённый"],
+            "english": ["reserved", "withdrawn", "introverted", "aloof", "solitary"],
+        },
+        "любознательный": {
+            "synonyms": ["любознательный", "пытливый", "любопытный", "дотошный", "исследовательский"],
+            "english": ["curious", "inquisitive", "eager to learn", "probing", "exploratory"],
+        },
+        "мудрый": {
+            "synonyms": ["мудрый", "разумный", "глубокий", "прозорливый", "просветлённый"],
+            "english": ["wise", "prudent", "profound", "insightful", "enlightened"],
+        },
+        "проницательный": {
+            "synonyms": ["проницательный", "прозорливый", "зоркий", "дальновидный", "глубокий"],
+            "english": ["insightful", "perceptive", "astute", "discerning", "sharp"],
+        },
+        "энергичный": {
+            "synonyms": ["энергичный", "деятельный", "активный", "живой", "стремительный"],
+            "english": ["energetic", "active", "dynamic", "lively", "vigorous"],
+        },
+        "флегматичный": {
+            "synonyms": ["флегматичный", "невозмутимый", "спокойный", "уравновешенный", "медлительный"],
+            "english": ["phlegmatic", "calm", "placid", "unemotional", "impassive"],
+        },
+        "вспыльчивый": {
+            "synonyms": ["вспыльчивый", "горячий", "несдержанный", "импульсивный", "запальчивый"],
+            "english": ["hot-tempered", "irascible", "impulsive", "quick-tempered", "fiery"],
+        },
+        "обаятельный": {
+            "synonyms": ["обаятельный", "очаровательный", "привлекательный", "шармирующий", "магнетический"],
+            "english": ["charming", "captivating", "alluring", "magnetic", "charismatic"],
+        },
+        "скрупулёзный": {
+            "synonyms": ["скрупулёзный", "педантичный", "тщательный", "дотошный", "аккуратный"],
+            "english": ["meticulous", "scrupulous", "thorough", "painstaking", "precise"],
+        },
+        "принципиальный": {
+            "synonyms": ["принципиальный", "твёрдый", "непреклонный", "честный", "порядочный"],
+            "english": ["principled", "firm", "resolute", "honest", "moral"],
+        },
+        "самоуверенный": {
+            "synonyms": ["самоуверенный", "самодовольный", "надменный", "самонадеянный", "спесивый"],
+            "english": ["overconfident", "smug", "arrogant", "presumptuous", "haughty"],
+        },
+    },
     "nature": {},
     "mind": {},
     "beauty": {},
