@@ -259,7 +259,128 @@ WORDS_BY_TOPIC = {
             "english": ["overconfident", "smug", "arrogant", "presumptuous", "haughty"],
         },
     },
-    "nature": {},
+        "nature": {
+        "солнце": {
+            "synonyms": ["солнце", "светило", "звезда", "лучезарное светило", "дневное светило"],
+            "english": ["sun", "sunshine", "daystar", "orb", "luminary"],
+        },
+        "дождь": {
+            "synonyms": ["дождь", "ливень", "морось", "гроза", "непогода"],
+            "english": ["rain", "shower", "drizzle", "downpour", "storm"],
+        },
+        "ветер": {
+            "synonyms": ["ветер", "ветерок", "вихрь", "буря", "ураган"],
+            "english": ["wind", "breeze", "gust", "storm", "hurricane"],
+        },
+        "снег": {
+            "synonyms": ["снег", "пороша", "снежок", "пурга", "метель"],
+            "english": ["snow", "snowfall", "snowflake", "blizzard", "snowstorm"],
+        },
+        "туман": {
+            "synonyms": ["туман", "мгла", "дымка", "марево", "пелена"],
+            "english": ["fog", "mist", "haze", "vapor", "cloud"],
+        },
+        "рассвет": {
+            "synonyms": ["рассвет", "заря", "восход", "утренняя заря", "первый свет"],
+            "english": ["dawn", "sunrise", "daybreak", "morning", "first light"],
+        },
+        "закат": {
+            "synonyms": ["закат", "заход", "вечерняя заря", "сумерки", "закатная пора"],
+            "english": ["sunset", "dusk", "twilight", "evening", "sundown"],
+        },
+        "тишина": {
+            "synonyms": ["тишина", "тишь", "молчание", "безмолвие", "покой"],
+            "english": ["silence", "stillness", "quiet", "calm", "hush"],
+        },
+        "гроза": {
+            "synonyms": ["гроза", "буря", "непогода", "шторм", "ненастье"],
+            "english": ["thunderstorm", "storm", "tempest", "squall", "gale"],
+        },
+        "радуга": {
+            "synonyms": ["радуга", "дуга", "разноцветная полоса", "семицветье", "небесный мост"],
+            "english": ["rainbow", "arc", "arch", "spectrum", "prism"],
+        },
+        "зимний": {
+            "synonyms": ["зимний", "морозный", "студёный", "холодный", "ледяной"],
+            "english": ["winter", "frosty", "chilly", "icy", "snowy"],
+        },
+        "весенний": {
+            "synonyms": ["весенний", "апрельский", "цветущий", "свежий", "первоцветный"],
+            "english": ["spring", "vernal", "blooming", "fresh", "budding"],
+        },
+        "осенний": {
+            "synonyms": ["осенний", "золотой", "унылый", "дождливый", "промозглый"],
+            "english": ["autumn", "fall", "golden", "rainy", "damp"],
+        },
+        "летний": {
+            "synonyms": ["летний", "жаркий", "знойный", "солнечный", "тёплый"],
+            "english": ["summer", "hot", "sunny", "warm", "sultry"],
+        },
+        "свежий": {
+            "synonyms": ["свежий", "прохладный", "бодрящий", "чистый", "живительный"],
+            "english": ["fresh", "cool", "crisp", "bracing", "refreshing"],
+        },
+        "тёплый": {
+            "synonyms": ["тёплый", "мягкий", "ласковый", "уютный", "согревающий"],
+            "english": ["warm", "mild", "gentle", "cozy", "balmy"],
+        },
+        "прохладный": {
+            "synonyms": ["прохладный", "свежий", "холодноватый", "студёный", "бодрящий"],
+            "english": ["cool", "chilly", "fresh", "crisp", "brisk"],
+        },
+        "пасмурный": {
+            "synonyms": ["пасмурный", "хмурый", "облачный", "серый", "угрюмый"],
+            "english": ["gloomy", "overcast", "cloudy", "gray", "dreary"],
+        },
+        "ясный": {
+            "synonyms": ["ясный", "солнечный", "прозрачный", "чистый", "безоблачный"],
+            "english": ["clear", "sunny", "bright", "cloudless", "fair"],
+        },
+        "солнечный": {
+            "synonyms": ["солнечный", "светлый", "лучезарный", "тёплый", "золотой"],
+            "english": ["sunny", "bright", "radiant", "warm", "golden"],
+        },
+        "звёздный": {
+            "synonyms": ["звёздный", "ночной", "небесный", "мерцающий", "сияющий"],
+            "english": ["starry", "nightly", "celestial", "twinkling", "gleaming"],
+        },
+        "лунный": {
+            "synonyms": ["лунный", "лучезарный", "серебристый", "бледный", "сияющий"],
+            "english": ["lunar", "moonlit", "silvery", "pale", "glowing"],
+        },
+        "утренний": {
+            "synonyms": ["утренний", "ранний", "рассветный", "бодрый", "свежий"],
+            "english": ["morning", "early", "dawning", "fresh", "matutinal"],
+        },
+        "вечерний": {
+            "synonyms": ["вечерний", "закатный", "сумеречный", "тихий", "уютный"],
+            "english": ["evening", "twilight", "dusky", "quiet", "vespertine"],
+        },
+        "ночной": {
+            "synonyms": ["ночной", "тёмный", "звёздный", "лунный", "таинственный"],
+            "english": ["night", "dark", "nocturnal", "starry", "mysterious"],
+        },
+        "река": {
+            "synonyms": ["река", "речка", "поток", "русло", "водная артерия"],
+            "english": ["river", "stream", "flow", "waterway", "current"],
+        },
+        "море": {
+            "synonyms": ["море", "океан", "пучина", "глубь", "водная гладь"],
+            "english": ["sea", "ocean", "deep", "expanse", "waters"],
+        },
+        "лес": {
+            "synonyms": ["лес", "чаща", "роща", "бор", "дубрава"],
+            "english": ["forest", "wood", "grove", "thicket", "woodland"],
+        },
+        "поле": {
+            "synonyms": ["поле", "луг", "равнина", "пашня", "простор"],
+            "english": ["field", "meadow", "plain", "grassland", "expanse"],
+        },
+        "гора": {
+            "synonyms": ["гора", "вершина", "пик", "хребет", "круча"],
+            "english": ["mountain", "peak", "summit", "ridge", "height"],
+        },
+    },
     "mind": {},
     "beauty": {},
 }
