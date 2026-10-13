@@ -381,7 +381,128 @@ WORDS_BY_TOPIC = {
             "english": ["mountain", "peak", "summit", "ridge", "height"],
         },
     },
-    "mind": {},
+        "mind": {
+        "разум": {
+            "synonyms": ["разум", "ум", "рассудок", "интеллект", "сознание"],
+            "english": ["mind", "reason", "intellect", "intelligence", "consciousness"],
+        },
+        "мысль": {
+            "synonyms": ["мысль", "дума", "идея", "размышление", "помысел"],
+            "english": ["thought", "idea", "notion", "reflection", "consideration"],
+        },
+        "идея": {
+            "synonyms": ["идея", "замысел", "концепция", "план", "озарение"],
+            "english": ["idea", "concept", "notion", "plan", "insight"],
+        },
+        "логика": {
+            "synonyms": ["логика", "последовательность", "рассуждение", "аргументация", "система"],
+            "english": ["logic", "reasoning", "argument", "rationale", "coherence"],
+        },
+        "память": {
+            "synonyms": ["память", "воспоминание", "мнемозина", "запоминание", "хранилище"],
+            "english": ["memory", "recollection", "remembrance", "reminiscence", "retention"],
+        },
+        "воображение": {
+            "synonyms": ["воображение", "фантазия", "представление", "вымысел", "мечта"],
+            "english": ["imagination", "fantasy", "vision", "fancy", "inventiveness"],
+        },
+        "внимание": {
+            "synonyms": ["внимание", "сосредоточенность", "концентрация", "наблюдательность", "зоркость"],
+            "english": ["attention", "focus", "concentration", "awareness", "alertness"],
+        },
+        "понимание": {
+            "synonyms": ["понимание", "осознание", "осмысление", "проникновение", "прозрение"],
+            "english": ["understanding", "comprehension", "insight", "realization", "grasp"],
+        },
+        "анализ": {
+            "synonyms": ["анализ", "разбор", "исследование", "изучение", "расчленение"],
+            "english": ["analysis", "examination", "study", "investigation", "breakdown"],
+        },
+        "синтез": {
+            "synonyms": ["синтез", "обобщение", "соединение", "интеграция", "сведение"],
+            "english": ["synthesis", "integration", "combination", "unification", "fusion"],
+        },
+        "мудрость": {
+            "synonyms": ["мудрость", "глубина", "проницательность", "прозорливость", "опыт"],
+            "english": ["wisdom", "depth", "insight", "sagacity", "prudence"],
+        },
+        "знание": {
+            "synonyms": ["знание", "эрудиция", "осведомлённость", "компетентность", "учёность"],
+            "english": ["knowledge", "erudition", "awareness", "expertise", "learning"],
+        },
+        "опыт": {
+            "synonyms": ["опыт", "практика", "навык", "умение", "мастерство"],
+            "english": ["experience", "practice", "skill", "expertise", "proficiency"],
+        },
+        "интуиция": {
+            "synonyms": ["интуиция", "чутьё", "предчувствие", "внутренний голос", "озарение"],
+            "english": ["intuition", "hunch", "instinct", "gut feeling", "insight"],
+        },
+        "вопрос": {
+            "synonyms": ["вопрос", "запрос", "проблема", "загадка", "недоумение"],
+            "english": ["question", "query", "problem", "riddle", "inquiry"],
+        },
+        "ответ": {
+            "synonyms": ["ответ", "решение", "отклик", "разгадка", "реплика"],
+            "english": ["answer", "response", "solution", "reply", "resolution"],
+        },
+        "исследование": {
+            "synonyms": ["исследование", "изучение", "разыскание", "поиск", "экспедиция"],
+            "english": ["research", "study", "investigation", "exploration", "inquiry"],
+        },
+        "гипотеза": {
+            "synonyms": ["гипотеза", "предположение", "догадка", "теория", "постулат"],
+            "english": ["hypothesis", "assumption", "conjecture", "theory", "supposition"],
+        },
+        "теория": {
+            "synonyms": ["теория", "учение", "концепция", "доктрина", "система"],
+            "english": ["theory", "doctrine", "concept", "system", "framework"],
+        },
+        "факт": {
+            "synonyms": ["факт", "данность", "реальность", "истина", "обстоятельство"],
+            "english": ["fact", "reality", "truth", "circumstance", "actuality"],
+        },
+        "вывод": {
+            "synonyms": ["вывод", "заключение", "умозаключение", "итог", "резюме"],
+            "english": ["conclusion", "inference", "deduction", "summary", "result"],
+        },
+        "размышление": {
+            "synonyms": ["размышление", "обдумывание", "рефлексия", "медитация", "дума"],
+            "english": ["reflection", "contemplation", "meditation", "deliberation", "musing"],
+        },
+        "сомнение": {
+            "synonyms": ["сомнение", "неуверенность", "колебание", "недоверие", "подозрение"],
+            "english": ["doubt", "uncertainty", "hesitation", "distrust", "skepticism"],
+        },
+        "убеждение": {
+            "synonyms": ["убеждение", "вера", "мнение", "взгляд", "позиция"],
+            "english": ["conviction", "belief", "opinion", "view", "position"],
+        },
+        "критика": {
+            "synonyms": ["критика", "разбор", "оценка", "анализ", "разоблачение"],
+            "english": ["criticism", "critique", "review", "analysis", "assessment"],
+        },
+        "интеллект": {
+            "synonyms": ["интеллект", "ум", "разум", "смышлёность", "сообразительность"],
+            "english": ["intellect", "intelligence", "mind", "cleverness", "wit"],
+        },
+        "эрудиция": {
+            "synonyms": ["эрудиция", "начитанность", "образованность", "осведомлённость", "знания"],
+            "english": ["erudition", "knowledge", "learning", "scholarship", "culture"],
+        },
+        "сообразительность": {
+            "synonyms": ["сообразительность", "смышлёность", "смекалка", "догадливость", "проворность"],
+            "english": ["ingenuity", "cleverness", "quickness", "sharpness", "resourcefulness"],
+        },
+        "проницательность": {
+            "synonyms": ["проницательность", "прозорливость", "зоркость", "дальновидность", "глубина"],
+            "english": ["insight", "perspicacity", "acuity", "discernment", "sharpness"],
+        },
+        "изобретательность": {
+            "synonyms": ["изобретательность", "находчивость", "креативность", "смекалка", "оригинальность"],
+            "english": ["inventiveness", "creativity", "resourcefulness", "ingenuity", "originality"],
+        },
+    },
     "beauty": {},
 }
 
