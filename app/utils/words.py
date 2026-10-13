@@ -503,7 +503,128 @@ WORDS_BY_TOPIC = {
             "english": ["inventiveness", "creativity", "resourcefulness", "ingenuity", "originality"],
         },
     },
-    "beauty": {},
+        "beauty": {
+        "красивый": {
+            "synonyms": ["красивый", "милый", "пригожий", "живописный", "великолепный"],
+            "english": ["beautiful", "pretty", "handsome", "picturesque", "magnificent"],
+        },
+        "изящный": {
+            "synonyms": ["изящный", "грациозный", "элегантный", "утончённый", "лёгкий"],
+            "english": ["elegant", "graceful", "refined", "delicate", "exquisite"],
+        },
+        "элегантный": {
+            "synonyms": ["элегантный", "изысканный", "утончённый", "стильный", "безупречный"],
+            "english": ["elegant", "stylish", "chic", "sophisticated", "refined"],
+        },
+        "утончённый": {
+            "synonyms": ["утончённый", "изысканный", "рафинированный", "изощрённый", "деликатный"],
+            "english": ["refined", "sophisticated", "delicate", "subtle", "polished"],
+        },
+        "живописный": {
+            "synonyms": ["живописный", "картинный", "красочный", "эффектный", "зрелищный"],
+            "english": ["picturesque", "scenic", "colorful", "vivid", "striking"],
+        },
+        "великолепный": {
+            "synonyms": ["великолепный", "превосходный", "блистательный", "роскошный", "царственный"],
+            "english": ["magnificent", "superb", "splendid", "luxurious", "majestic"],
+        },
+        "божественный": {
+            "synonyms": ["божественный", "небесный", "ангельский", "чудный", "дивный"],
+            "english": ["divine", "heavenly", "angelic", "wondrous", "sublime"],
+        },
+        "очаровательный": {
+            "synonyms": ["очаровательный", "обаятельный", "пленительный", "прелестный", "милый"],
+            "english": ["charming", "enchanting", "captivating", "delightful", "bewitching"],
+        },
+        "восхитительный": {
+            "synonyms": ["восхитительный", "обворожительный", "упоительный", "пленительный", "дивный"],
+            "english": ["delightful", "ravishing", "enchanting", "captivating", "bewitching"],
+        },
+        "прелестный": {
+            "synonyms": ["прелестный", "милый", "очаровательный", "обворожительный", "душевный"],
+            "english": ["lovely", "charming", "sweet", "delightful", "enchanting"],
+        },
+        "безупречный": {
+            "synonyms": ["безупречный", "безукоризненный", "идеальный", "совершенный", "безупречный"],
+            "english": ["flawless", "impeccable", "perfect", "spotless", "unblemished"],
+        },
+        "роскошный": {
+            "synonyms": ["роскошный", "пышный", "шикарный", "богатый", "величественный"],
+            "english": ["luxurious", "opulent", "lavish", "sumptuous", "grand"],
+        },
+        "пышный": {
+            "synonyms": ["пышный", "роскошный", "нарядный", "величественный", "торжественный"],
+            "english": ["lush", "luxuriant", "ornate", "sumptuous", "grand"],
+        },
+        "грациозный": {
+            "synonyms": ["грациозный", "изящный", "стройный", "пластичный", "лёгкий"],
+            "english": ["graceful", "elegant", "lithe", "supple", "agile"],
+        },
+        "стройный": {
+            "synonyms": ["стройный", "статный", "подтянутый", "ладный", "гибкий"],
+            "english": ["slender", "slim", "well-proportioned", "trim", "willowy"],
+        },
+        "стильный": {
+            "synonyms": ["стильный", "модный", "элегантный", "шикарный", "трендовый"],
+            "english": ["stylish", "fashionable", "chic", "trendy", "sleek"],
+        },
+        "гармоничный": {
+            "synonyms": ["гармоничный", "слаженный", "согласованный", "стройный", "соразмерный"],
+            "english": ["harmonious", "balanced", "coherent", "well-proportioned", "symmetrical"],
+        },
+        "совершенный": {
+            "synonyms": ["совершенный", "идеальный", "безупречный", "законченный", "абсолютный"],
+            "english": ["perfect", "flawless", "ideal", "consummate", "absolute"],
+        },
+        "изысканный": {
+            "synonyms": ["изысканный", "утончённый", "элегантный", "рафинированный", "деликатный"],
+            "english": ["exquisite", "refined", "delicate", "sophisticated", "choice"],
+        },
+        "эффектный": {
+            "synonyms": ["эффектный", "зрелищный", "впечатляющий", "яркий", "броский"],
+            "english": ["striking", "spectacular", "impressive", "showy", "dramatic"],
+        },
+        "яркий": {
+            "synonyms": ["яркий", "сочный", "насыщенный", "ослепительный", "кричащий"],
+            "english": ["bright", "vivid", "vibrant", "dazzling", "radiant"],
+        },
+        "сочный": {
+            "synonyms": ["сочный", "насыщенный", "глубокий", "богатый", "яркий"],
+            "english": ["rich", "vivid", "deep", "saturated", "luscious"],
+        },
+        "нежный": {
+            "synonyms": ["нежный", "мягкий", "ласковый", "трепетный", "тонкий"],
+            "english": ["tender", "soft", "delicate", "gentle", "subtle"],
+        },
+        "тонкий": {
+            "synonyms": ["тонкий", "изящный", "деликатный", "утончённый", "филигранный"],
+            "english": ["fine", "subtle", "delicate", "refined", "exquisite"],
+        },
+        "филигранный": {
+            "synonyms": ["филигранный", "ювелирный", "тонкий", "мастерский", "виртуозный"],
+            "english": ["filigree", "exquisite", "masterful", "intricate", "delicate"],
+        },
+        "чарующий": {
+            "synonyms": ["чарующий", "пленительный", "очаровательный", "магический", "сказочный"],
+            "english": ["enchanting", "bewitching", "captivating", "magical", "mesmerizing"],
+        },
+        "пленительный": {
+            "synonyms": ["пленительный", "очаровательный", "чарующий", "обворожительный", "манящий"],
+            "english": ["captivating", "enchanting", "alluring", "bewitching", "entrancing"],
+        },
+        "завораживающий": {
+            "synonyms": ["завораживающий", "гипнотический", "чарующий", "пленительный", "магический"],
+            "english": ["mesmerizing", "hypnotic", "enchanting", "captivating", "spellbinding"],
+        },
+        "трогательный": {
+            "synonyms": ["трогательный", "волнующий", "проникновенный", "душевный", "умилительный"],
+            "english": ["touching", "moving", "heartwarming", "poignant", "affecting"],
+        },
+        "умиротворяющий": {
+            "synonyms": ["умиротворяющий", "успокаивающий", "тихий", "безмятежный", "ласковый"],
+            "english": ["soothing", "calming", "serene", "peaceful", "tranquil"],
+        },
+    },
 }
 
 
