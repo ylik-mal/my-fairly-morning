@@ -18,6 +18,7 @@ from app.handlers import reflection as reflection_handler
 from app.handlers import stats as stats_handler
 from app.handlers import words as words_handler
 from app.handlers import menu as menu_handler
+from app.handlers import cookies as cookies_handler
 
 from app.scheduler.runner import start_scheduler
 
@@ -45,6 +46,7 @@ async def main() -> None:
     dp.include_router(stats_handler.router)
     dp.include_router(words_handler.router)
     dp.include_router(menu_handler.router)
+    dp.include_router(cookies_handler.router)
 
     await init_db()
 
@@ -65,6 +67,7 @@ async def main() -> None:
         BotCommand(command="chart", description="📈 График за 7 дней"),
         BotCommand(command="word", description="📚 Слово дня"),
         BotCommand(command="topics", description="🎯 Выбрать тему"),
+        BotCommand(command="cookie", description="🥠 Предсказание на день"),
     ])
 
     start_scheduler(bot, dp)
