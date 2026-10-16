@@ -8,7 +8,10 @@ from aiogram.fsm.storage.base import StorageKey
 from app.database.db import get_today_checkins, get_user_habits, get_users_with_morning_time
 from app.keyboards.checkin import habits_keyboard
 from app.database.db import get_users_with_evening_time
+from app.database.db import get_word_topic
 from app.handlers.reflection import Reflection
+from app.utils.cookies import get_random_cookie
+from app.utils.words import get_word_of_the_day
 
 
 logger = logging.getLogger(__name__)
@@ -31,9 +34,22 @@ async def send_morning_digest(bot: Bot) -> None:
                 continue
 
             checkins = await get_today_checkins(user_id)
+            topic = await get_word_topic(user_id)
+            word, word_data = get_word_of_the_day(topic)
+
+            synonyms_line = " → ".join(word_data["synonyms"])
+            english_line = " / ".join(word_data["english"])
+            cookie = get_random_cookie()
+
             text = (
                 "🌅 <b>Доброе утро!</b>\n\n"
-                "📅 Привычки на сегодня:"
+                "📅 <b>Привычки на сегодня:</b>\n"
+                f"<i>Отметь их ниже 👇</i>\n\n"
+                f"📚 <b>Слово дня: {word.upper()}</b>\n"
+                f"• {synonyms_line}\n"
+                f"🇬🇧 {english_line}\n\n"
+                f"🥠 <b>Предсказание:</b>\n"
+                f"<i>«{cookie}»</i>"
             )
             await bot.send_message(
                 chat_id=user_id,
