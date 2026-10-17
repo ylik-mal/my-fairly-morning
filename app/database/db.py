@@ -306,6 +306,7 @@ async def get_habits_stats(user_id: int, days: int = 7) -> list[dict]:
                 skipped_count = row[0] if row else 0
 
             result.append({
+                "id": habit_id,
                 "title": title,
                 "done": done_count,
                 "skipped": skipped_count,
@@ -350,3 +351,39 @@ async def get_word_topic(user_id: int) -> str:
         ) as cursor:
             row = await cursor.fetchone()
             return row[0] if row else "emotions"
+
+async def get_habit_streak(habit_id: int, user_id: int) -> int:
+    """Возвращает количество дней подряд, сколько привычка выполнялась до сегодня."""
+    from datetime import timedelta
+
+    async with aiosqlite.connect(DB_PATH) as db:
+        async with db.execute(
+            """
+            SELECT date FROM checkins
+            WHERE habit_id = ? AND user_id = ? AND status = 'done'
+            ORDER BY date DESC
+            """,
+            (habit_id, user_id),
+        ) as cursor:
+            dates = [row[0] for row in await cursor.fetchall()]
+
+    if not dates:
+        return 0
+
+    # Проверяем, начиная с сегодня
+    today = date_module.today()
+    streak = 0
+    check_date = today
+
+    # Если сегодня ещё не отмечено — начинаем со вчера
+    if dates[0] != today.isoformat():
+        check_date = today - timedelta(days=1)
+
+    for date_str in dates:
+        if date_str == check_date.isoformat():
+            streak += 1
+            check_date -= timedelta(days=1)
+        else:
+            break
+
+    return streak

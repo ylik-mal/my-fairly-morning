@@ -2,7 +2,7 @@ from aiogram import Router
 from aiogram.filters import Command
 from aiogram.types import BufferedInputFile, Message
 
-from app.database.db import get_habits_stats
+from app.database.db import get_habit_streak, get_habits_stats
 from app.utils.charts import generate_chart
 
 
