@@ -9,6 +9,7 @@ from app.database.db import get_today_checkins, get_user_habits, get_users_with_
 from app.keyboards.checkin import habits_keyboard
 from app.database.db import get_users_with_evening_time
 from app.database.db import get_word_topic
+from app.database.db import get_habit_streak
 from app.handlers.reflection import Reflection
 from app.utils.cookies import get_random_cookie
 from app.utils.words import get_word_of_the_day
@@ -41,6 +42,17 @@ async def send_morning_digest(bot: Bot) -> None:
             english_line = " / ".join(word_data["english"])
             cookie = get_random_cookie()
 
+            streak_lines = []
+            for habit_id, habit_title in habits:
+                streak = await get_habit_streak(habit_id, user_id)
+                if streak > 0:
+                    streak_lines.append(f"🔥 {habit_title}: {streak} дн.")
+
+            streak_text = ""
+            if streak_lines:
+                streak_text = "\n\n🔥 <b>Твои серии:</b>\n" + "\n".join(streak_lines)
+
+
             text = (
                 "🌅 <b>Доброе утро!</b>\n\n"
                 "📅 <b>Привычки на сегодня:</b>\n"
@@ -50,6 +62,7 @@ async def send_morning_digest(bot: Bot) -> None:
                 f"🇬🇧 {english_line}\n\n"
                 f"🥠 <b>Предсказание:</b>\n"
                 f"<i>«{cookie}»</i>"
+                f"{streak_text}"
             )
             await bot.send_message(
                 chat_id=user_id,
