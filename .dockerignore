@@ -1,0 +1,41 @@
+# Git
+.git/
+.gitignore
+
+# Виртуальное окружение
+venv/
+.venv/
+env/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# База данных (создаётся при запуске)
+*.db
+*.sqlite3
+
+# Переменные окружения
+.env
+
+# Кеш и тесты
+.pytest_cache/
+tests/
+
+# IDE
+.vscode/
+.idea/
+
+# Локальные утилиты
+proxies.txt
+check_*.py
+
+# Документация
+docs/
+*.md
+!README.md
+
+# OS
+.DS_Store
+Thumbs.db
