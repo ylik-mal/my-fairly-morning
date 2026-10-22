@@ -48,7 +48,6 @@ Telegram-бот для отслеживания привычек и вечерн
 - GitHub Actions (CI)
 - csv (экспорт данных)
 
-
 ## Слово дня
 
 Бот присылает одно слово в день из выбранной темы — с синонимами (от простого к сложному) и английскими переводами.
@@ -83,6 +82,7 @@ Telegram-бот для отслеживания привычек и вечерн
 
 🍀 Удачного дня!
 
+
 ## Экспорт данных
 
 Команда `/export` позволяет выгрузить свои данные в формате CSV для анализа в Excel или Google Sheets.
@@ -93,19 +93,60 @@ Telegram-бот для отслеживания привычек и вечерн
 - **📝 Рефлексии** — дата, оценка дня, что удалось, что не получилось.
 
 ### Пример
-
 /export
+
 Бот предложит две кнопки — выбери нужный тип данных, и получишь файл.
 
-## Установка
+## Docker
 
-### Требования
-- Python 3.12
-- Telegram Bot Token (получить у [@BotFather](https://t.me/BotFather))
+### Запуск через Docker
 
-### Шаги
+1. Создать `.env` на основе `.env.example`:
+BOT_TOKEN=your_telegram_bot_token_here
+PROXY=socks5://IP:PORT
 
+2. Запустить:
+```bash
+docker compose up -d
+
+3. Логи:
+docker compose logs -f
+
+4. Остановить
+docker compose down
+
+Установка
+Требования
+Python 3.12
+
+Telegram Bot Token (получить у @BotFather)
+
+Шаги
 1. Клонировать репозиторий:
-   ```bash
-   git clone https://github.com/ylik-mal/my-fairly-morning.git
-   cd my-fairly-morning
+git clone https://github.com/ylik-mal/my-fairly-morning.git
+cd my-fairly-morning
+
+2. Создать виртуальное окружение:
+python -m venv venv
+.\venv\Scripts\Activate.ps1    # Windows
+source venv/bin/activate        # Mac/Linux
+
+3. Установить зависимоть:
+pip install -r requirements.txt
+
+4. Создать .env на основе .env.example:
+BOT_TOKEN=your_telegram_bot_token_here
+PROXY=socks5://IP:PORT
+
+5. Запустить:
+python main.py
+
+Работа через прокси
+В регионах, где api.telegram.org недоступен, бот поддерживает SOCKS5-прокси. Укажите прокси в .env:
+PROXY=socks5://IP:PORT
+
+Документация
+
+ROADMAP.md — план развития проекта
+PROGRESS.md — трекер активности
+IDEAS.md — идеи для улучшения
