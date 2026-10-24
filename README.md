@@ -1,20 +1,17 @@
 [![Tests](https://github.com/ylik-mal/my-fairly-morning/actions/workflows/tests.yml/badge.svg)](https://github.com/ylik-mal/my-fairly-morning/actions/workflows/tests.yml)
 
 # My Fairly Morning 🌅
-
 Telegram-бот для отслеживания привычек и вечерней рефлексии.
 
 <p align="center">
   <img src="docs/screenshots/02_start.jpg" width="280" alt="Старт"/>
   <img src="docs/screenshots/03_today.jpg" width="280" alt="Сегодня"/>
 </p>
-
 <p align="center">
   <img src="docs/screenshots/04_chart.jpg" width="500" alt="График"/>
 </p>
 
 ## Возможности
-
 - ✅ Добавление привычек (`/add_habit`)
 - ✅ Просмотр списка привычек (`/my_habits`)
 - ✅ Ежедневные отметки (`/today` с кнопками «Сделано / Пропустить»)
@@ -32,13 +29,11 @@ Telegram-бот для отслеживания привычек и вечерн
 - ✅ Экспорт данных в CSV (`/export` — привычки и рефлексии)
 
 ## Меню команд
-
 <p align="center">
   <img src="docs/screenshots/01_menu.jpg" width="300" alt="Меню"/>
 </p>
 
 ## Стек
-
 - Python 3.12
 - aiogram 3.x
 - SQLite (aiosqlite)
@@ -49,11 +44,9 @@ Telegram-бот для отслеживания привычек и вечерн
 - csv (экспорт данных)
 
 ## Слово дня
-
 Бот присылает одно слово в день из выбранной темы — с синонимами (от простого к сложному) и английскими переводами.
 
 ### Доступные темы
-
 - 🎭 Эмоции и чувства — 29 слов
 - 💪 Характер человека — 32 слова
 - 🌿 Природа и погода — 30 слов
@@ -63,90 +56,103 @@ Telegram-бот для отслеживания привычек и вечерн
 **Всего: 151 слово.** Смена темы: `/topics`.
 
 ### Пример
+```text
 📚 Слово дня: КРАСИВЫЙ
-
-• красивый → милый → пригожий → живописный → великолепный → божественный
-
+- красивый → милый → пригожий → живописный → великолепный → божественный
 🇬🇧 beautiful / pretty / handsome / picturesque / magnificent / gorgeous
-
+```
 
 ## Печенька с предсказанием
-
 Команда `/cookie` присылает случайное мотивационное предсказание из 30 фраз. Печенька автоматически добавляется в утренний дайджест.
 
 ### Пример
+```text
 🥠 Твоё предсказание на сегодня:
-
 «Сегодня отличный день, чтобы начать что-то новое.
 Не откладывай мечты — сделай первый шаг!»
-
 🍀 Удачного дня!
-
+```
 
 ## Экспорт данных
-
 Команда `/export` позволяет выгрузить свои данные в формате CSV для анализа в Excel или Google Sheets.
 
 ### Что можно экспортировать
-
 - **📋 Привычки** — название, выполнено за 30 дней, пропущено, процент, отметка сегодня.
 - **📝 Рефлексии** — дата, оценка дня, что удалось, что не получилось.
 
 ### Пример
+```text
 /export
-
+```
 Бот предложит две кнопки — выбери нужный тип данных, и получишь файл.
 
 ## Docker
 
 ### Запуск через Docker
-
 1. Создать `.env` на основе `.env.example`:
+```text
 BOT_TOKEN=your_telegram_bot_token_here
 PROXY=socks5://IP:PORT
+```
 
 2. Запустить:
 ```bash
 docker compose up -d
+```
 
 3. Логи:
+```bash
 docker compose logs -f
+```
 
-4. Остановить
+4. Остановить:
+```bash
 docker compose down
+```
 
-Установка
-Требования
-Python 3.12
+## Установка
 
-Telegram Bot Token (получить у @BotFather)
+### Требования
+- Python 3.12
+- Telegram Bot Token (получить у @BotFather)
 
-Шаги
+### Шаги
 1. Клонировать репозиторий:
-git clone https://github.com/ylik-mal/my-fairly-morning.git
+```bash
+git clone [https://github.com/ylik-mal/my-fairly-morning.git](https://github.com/ylik-mal/my-fairly-morning.git)
 cd my-fairly-morning
+```
 
 2. Создать виртуальное окружение:
+```bash
 python -m venv venv
 .\venv\Scripts\Activate.ps1    # Windows
-source venv/bin/activate        # Mac/Linux
+source venv/bin/activate       # Mac/Linux
+```
 
-3. Установить зависимоть:
+3. Установить зависимости:
+```bash
 pip install -r requirements.txt
+```
 
-4. Создать .env на основе .env.example:
+4. Создать `.env` на основе `.env.example`:
+```text
 BOT_TOKEN=your_telegram_bot_token_here
 PROXY=socks5://IP:PORT
+```
 
 5. Запустить:
+```bash
 python main.py
+```
 
-Работа через прокси
-В регионах, где api.telegram.org недоступен, бот поддерживает SOCKS5-прокси. Укажите прокси в .env:
+## Работа через прокси
+В регионах, где api.telegram.org недоступен, бот поддерживает SOCKS5-прокси. Укажите прокси в `.env`:
+```text
 PROXY=socks5://IP:PORT
+```
 
-Документация
-
-ROADMAP.md — план развития проекта
-PROGRESS.md — трекер активности
-IDEAS.md — идеи для улучшения
+## Документация
+- ROADMAP.md — план развития проекта
+- PROGRESS.md — трекер активности
+- IDEAS.md — идеи для улучшения
