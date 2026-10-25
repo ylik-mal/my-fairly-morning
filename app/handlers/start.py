@@ -44,6 +44,13 @@ async def cmd_start(message: Message) -> None:
             "   <code>/today</code>\n\n"
             "🌙 Вечером — рефлексия:\n"
             "   <code>/reflect</code> или <code>/set_evening 21:00</code>\n\n"
+            "📚 <b>А ещё у меня есть:</b>\n"
+            "• /word — слово дня с синонимами и переводом\n"
+            "• /cookie — печенька с мотивацией\n"
+            "• /stats — статистика и серии\n"
+            "• /chart — график выполнения\n"
+            "• /export — экспорт в CSV\n"
+            "• /menu — главное меню со всеми командами\n\n"
             "Все команды: /help\n\n"
             "Готов начать? Жми кнопку ниже 👇"
         )
@@ -55,6 +62,9 @@ async def cmd_start(message: Message) -> None:
             "/today — отметить привычки\n"
             "/my_habits — список привычек\n"
             "/stats — статистика за неделю\n"
+            "/word — слово дня\n"
+            "/cookie — печенька с мотивацией\n"
+            "/menu — главное меню\n"
             "/help — все команды"
         )
 
