@@ -41,9 +41,12 @@ async def cmd_stats(message: Message) -> None:
         else:
             emoji = "❌"
 
-        lines.append(f"{emoji} {title}: {done}/{days} ({percent}%)")
+        # Streak
+        habit_id = s["id"]
+        streak = await get_habit_streak(habit_id, message.from_user.id)
+        streak_str = f" — серия: {streak} дн." if streak > 0 else ""
 
-    lines.append(f"\n<b>Всего выполнений:</b> {total_done}")
+        lines.append(f"{emoji} {title}: {done}/{days} ({percent}%){streak_str}")
 
     await message.answer("\n".join(lines))
 
