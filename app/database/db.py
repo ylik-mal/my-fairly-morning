@@ -5,7 +5,17 @@ from app.config import DB_PATH
 
 
 async def init_db() -> None:
-    """Создаёт таблицы, если их ещё нет."""
+    """
+    Создаёт все таблицы в БД, если их ещё нет.
+
+    Таблицы:
+        - users: пользователи бота
+        - habits: привычки пользователей
+        - checkins: ежедневные отметки
+        - user_settings: настройки времени
+        - reflections: вечерние рефлексии
+        - user_word_topic: выбранные темы слов
+    """
     async with aiosqlite.connect(DB_PATH) as db:
         await db.execute(
             """
@@ -91,7 +101,14 @@ async def get_or_create_user(
     username: str | None,
     first_name: str | None,
 ) -> None:
-    """Регистрирует пользователя, если его ещё нет."""
+    """
+    Регистрирует пользователя в БД, если его ещё нет.
+
+    Args:
+        telegram_id: Уникальный ID пользователя в Telegram.
+        username: Username (без @), может быть None.
+        first_name: Имя пользователя, может быть None.
+    """
     async with aiosqlite.connect(DB_PATH) as db:
         await db.execute(
             """
@@ -104,7 +121,13 @@ async def get_or_create_user(
 
 
 async def add_habit(telegram_id: int, title: str) -> None:
-    """Добавляет привычку пользователю."""
+    """
+    Добавляет новую привычку пользователю.
+
+    Args:
+        telegram_id: Telegram ID пользователя.
+        title: Название привычки (например, "Выпить воды").
+    """
     async with aiosqlite.connect(DB_PATH) as db:
         await db.execute(
             "INSERT INTO habits (user_id, title) VALUES (?, ?)",
@@ -114,7 +137,15 @@ async def add_habit(telegram_id: int, title: str) -> None:
 
 
 async def get_user_habits(telegram_id: int) -> list[tuple[int, str]]:
-    """Возвращает список привычек пользователя в виде [(id, title), ...]."""
+    """
+    Возвращает список всех привычек пользователя.
+
+    Args:
+        telegram_id: Telegram ID пользователя.
+
+    Returns:
+        Список кортежей (habit_id, title), отсортированный по ID.
+    """
     async with aiosqlite.connect(DB_PATH) as db:
         async with db.execute(
             "SELECT id, title FROM habits WHERE user_id = ? ORDER BY id",
@@ -124,7 +155,16 @@ async def get_user_habits(telegram_id: int) -> list[tuple[int, str]]:
 
 
 async def set_checkin(habit_id: int, user_id: int, status: str) -> None:
-    """Отмечает привычку как выполненную или пропущенную на сегодня."""
+    """
+    Сохраняет отметку привычки за сегодня.
+
+    Если отметка уже есть — обновляет статус.
+
+    Args:
+        habit_id: ID привычки.
+        user_id: Telegram ID пользователя.
+        status: "done" или "skipped".
+    """
     today = date_module.today().isoformat()
     async with aiosqlite.connect(DB_PATH) as db:
         await db.execute(
@@ -140,7 +180,15 @@ async def set_checkin(habit_id: int, user_id: int, status: str) -> None:
 
 
 async def get_today_checkins(user_id: int) -> dict[int, str]:
-    """Возвращает dict {habit_id: status} за сегодня."""
+    """
+    Возвращает все отметки пользователя за сегодня.
+
+    Args:
+        user_id: Telegram ID пользователя.
+
+    Returns:
+        Словарь {habit_id: status}, где status — "done" или "skipped".
+    """
     today = date_module.today().isoformat()
     async with aiosqlite.connect(DB_PATH) as db:
         async with db.execute(
@@ -152,7 +200,13 @@ async def get_today_checkins(user_id: int) -> dict[int, str]:
 
 
 async def set_morning_time(user_id: int, time_str: str) -> None:
-    """Сохраняет время утреннего дайджеста для пользователя."""
+    """
+    Сохраняет время утреннего дайджеста.
+
+    Args:
+        user_id: Telegram ID пользователя.
+        time_str: Время в формате "HH:MM" (например, "08:00").
+    """
     async with aiosqlite.connect(DB_PATH) as db:
         await db.execute(
             """
@@ -167,7 +221,15 @@ async def set_morning_time(user_id: int, time_str: str) -> None:
 
 
 async def get_morning_time(user_id: int) -> str | None:
-    """Возвращает время утреннего дайджеста или None."""
+    """
+    Возвращает время утреннего дайджеста.
+
+    Args:
+        user_id: Telegram ID пользователя.
+
+    Returns:
+        Время в формате "HH:MM" или None, если не настроено.
+    """
     async with aiosqlite.connect(DB_PATH) as db:
         async with db.execute(
             "SELECT morning_time FROM user_settings WHERE user_id = ?",
@@ -178,7 +240,15 @@ async def get_morning_time(user_id: int) -> str | None:
 
 
 async def get_users_with_morning_time(time_str: str) -> list[int]:
-    """Возвращает user_id всех, у кого утреннее время = time_str (HH:MM)."""
+    """
+    Возвращает всех пользователей, у кого утренний дайджест в указанное время.
+
+    Args:
+        time_str: Время в формате "HH:MM".
+
+    Returns:
+        Список Telegram ID пользователей.
+    """
     async with aiosqlite.connect(DB_PATH) as db:
         async with db.execute(
             "SELECT user_id FROM user_settings WHERE morning_time = ?",
@@ -189,7 +259,13 @@ async def get_users_with_morning_time(time_str: str) -> list[int]:
 
 
 async def set_evening_time(user_id: int, time_str: str) -> None:
-    """Сохраняет время вечерней рефлексии для пользователя."""
+    """
+    Сохраняет время вечерней рефлексии.
+
+    Args:
+        user_id: Telegram ID пользователя.
+        time_str: Время в формате "HH:MM".
+    """
     async with aiosqlite.connect(DB_PATH) as db:
         await db.execute(
             """
@@ -204,7 +280,15 @@ async def set_evening_time(user_id: int, time_str: str) -> None:
 
 
 async def get_evening_time(user_id: int) -> str | None:
-    """Возвращает время вечерней рефлексии или None."""
+    """
+    Возвращает время вечерней рефлексии.
+
+    Args:
+        user_id: Telegram ID пользователя.
+
+    Returns:
+        Время в формате "HH:MM" или None.
+    """
     async with aiosqlite.connect(DB_PATH) as db:
         async with db.execute(
             "SELECT evening_time FROM user_settings WHERE user_id = ?",
@@ -215,7 +299,15 @@ async def get_evening_time(user_id: int) -> str | None:
 
 
 async def get_users_with_evening_time(time_str: str) -> list[int]:
-    """Возвращает user_id всех, у кого вечернее время = time_str (HH:MM)."""
+    """
+    Возвращает всех пользователей, у кого рефлексия в указанное время.
+
+    Args:
+        time_str: Время в формате "HH:MM".
+
+    Returns:
+        Список Telegram ID пользователей.
+    """
     async with aiosqlite.connect(DB_PATH) as db:
         async with db.execute(
             "SELECT user_id FROM user_settings WHERE evening_time = ?",
@@ -231,7 +323,17 @@ async def save_reflection(
     success: str | None,
     failure: str | None,
 ) -> None:
-    """Сохраняет вечернюю рефлексию. Если за сегодня уже есть — обновляет."""
+    """
+    Сохраняет вечернюю рефлексию.
+
+    Если рефлексия за сегодня уже есть — обновляет её.
+
+    Args:
+        user_id: Telegram ID пользователя.
+        rating: Оценка дня от 1 до 10 (может быть None).
+        success: Что удалось (может быть None).
+        failure: Что не получилось (может быть None).
+    """
     today = date_module.today().isoformat()
     async with aiosqlite.connect(DB_PATH) as db:
         await db.execute(
@@ -253,7 +355,16 @@ async def get_recent_reflections(
     user_id: int,
     limit: int = 7,
 ) -> list[tuple[str, int | None, str | None, str | None]]:
-    """Возвращает последние рефлексии: [(date, rating, success, failure), ...]."""
+    """
+    Возвращает последние рефлексии пользователя.
+
+    Args:
+        user_id: Telegram ID пользователя.
+        limit: Максимальное количество записей (по умолчанию 7).
+
+    Returns:
+        Список кортежей (date, rating, success, failure), отсортированный по дате DESC.
+    """
     async with aiosqlite.connect(DB_PATH) as db:
         async with db.execute(
             """
@@ -269,7 +380,16 @@ async def get_recent_reflections(
 
 
 async def get_habits_stats(user_id: int, days: int = 7) -> list[dict]:
-    """Возвращает статистику по каждой привычке за последние N дней."""
+    """
+    Возвращает статистику по каждой привычке за последние N дней.
+
+    Args:
+        user_id: Telegram ID пользователя.
+        days: Количество дней для анализа (по умолчанию 7).
+
+    Returns:
+        Список словарей с ключами: id, title, done, skipped, days.
+    """
     today = date_module.today()
     start_date = (today - timedelta(days=days - 1)).isoformat()
 
@@ -317,7 +437,15 @@ async def get_habits_stats(user_id: int, days: int = 7) -> list[dict]:
 
 
 async def is_new_user(telegram_id: int) -> bool:
-    """True, если у пользователя ещё нет ни одной привычки."""
+    """
+    Проверяет, новый ли пользователь (нет ли у него привычек).
+
+    Args:
+        telegram_id: Telegram ID пользователя.
+
+    Returns:
+        True, если у пользователя ещё нет привычек, иначе False.
+    """
     async with aiosqlite.connect(DB_PATH) as db:
         async with db.execute(
             "SELECT COUNT(*) FROM habits WHERE user_id = ?",
@@ -328,7 +456,13 @@ async def is_new_user(telegram_id: int) -> bool:
 
 
 async def set_word_topic(user_id: int, topic: str) -> None:
-    """Сохраняет выбранную тему слова дня."""
+    """
+    Сохраняет выбранную тему для слова дня.
+
+    Args:
+        user_id: Telegram ID пользователя.
+        topic: Ключ темы (например, "emotions", "character").
+    """
     async with aiosqlite.connect(DB_PATH) as db:
         await db.execute(
             """
@@ -343,7 +477,15 @@ async def set_word_topic(user_id: int, topic: str) -> None:
 
 
 async def get_word_topic(user_id: int) -> str:
-    """Возвращает выбранную тему или 'emotions' по умолчанию."""
+    """
+    Возвращает выбранную тему для слова дня.
+
+    Args:
+        user_id: Telegram ID пользователя.
+
+    Returns:
+        Ключ темы. По умолчанию — "emotions".
+    """
     async with aiosqlite.connect(DB_PATH) as db:
         async with db.execute(
             "SELECT topic FROM user_word_topic WHERE user_id = ?",
@@ -352,10 +494,22 @@ async def get_word_topic(user_id: int) -> str:
             row = await cursor.fetchone()
             return row[0] if row else "emotions"
 
-async def get_habit_streak(habit_id: int, user_id: int) -> int:
-    """Возвращает количество дней подряд, сколько привычка выполнялась до сегодня."""
-    from datetime import timedelta
 
+async def get_habit_streak(habit_id: int, user_id: int) -> int:
+    """
+    Возвращает количество дней подряд, сколько привычка выполнялась до сегодня.
+
+    Проверяет, начиная с сегодня (или вчера, если сегодня ещё не отмечено),
+    и идёт назад, пока даты идут подряд без пропусков.
+
+    Args:
+        habit_id: ID привычки.
+        user_id: Telegram ID пользователя.
+
+    Returns:
+        Число дней подряд. 0, если привычка не выполнялась сегодня
+        или вчера, либо если отметок вообще нет.
+    """
     async with aiosqlite.connect(DB_PATH) as db:
         async with db.execute(
             """
