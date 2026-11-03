@@ -11,7 +11,18 @@ from app.database.db import (
 
 
 async def generate_habits_csv(user_id: int) -> io.BytesIO | None:
-    """Генерирует CSV с привычками и статистикой пользователя."""
+    """
+    Генерирует CSV-файл с привычками и статистикой пользователя.
+
+    Включает: название, количество выполнений за 30 дней,
+    пропусков, процент, отметку за сегодня.
+
+    Args:
+        user_id: Telegram ID пользователя.
+
+    Returns:
+        BytesIO с CSV (UTF-8 с BOM для Excel) или None, если нет привычек.
+    """
     habits = await get_user_habits(user_id)
     if not habits:
         return None
@@ -64,7 +75,17 @@ async def generate_habits_csv(user_id: int) -> io.BytesIO | None:
 
 
 async def generate_reflections_csv(user_id: int) -> io.BytesIO | None:
-    """Генерирует CSV с историей рефлексий."""
+    """
+    Генерирует CSV-файл с историей вечерних рефлексий.
+
+    Включает: дату, оценку дня (1-10), что удалось, что не получилось.
+
+    Args:
+        user_id: Telegram ID пользователя.
+
+    Returns:
+        BytesIO с CSV (UTF-8 с BOM для Excel) или None, если нет рефлексий.
+    """
     reflections = await get_recent_reflections(user_id, limit=100)
     if not reflections:
         return None

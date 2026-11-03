@@ -8,7 +8,19 @@ from app.database.db import get_habits_stats
 
 
 async def generate_chart(user_id: int, days: int = 7) -> io.BytesIO | None:
-    """Генерирует график выполнения привычек и возвращает PNG в BytesIO."""
+    """
+    Генерирует столбчатую диаграмму выполнения привычек за N дней.
+
+    Создаёт PNG-изображение в памяти (BytesIO) с помощью matplotlib.
+    Используется в команде `/chart`.
+
+    Args:
+        user_id: Telegram ID пользователя.
+        days: Количество дней для анализа (по умолчанию 7).
+
+    Returns:
+        BytesIO с PNG-изображением или None, если у пользователя нет привычек.
+    """
     stats = await get_habits_stats(user_id, days=days)
 
     if not stats:
