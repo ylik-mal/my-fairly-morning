@@ -19,6 +19,13 @@ async def cmd_stats(message: Message) -> None:
             "Добавь первую: <code>/add_habit Выпить воды</code>"
         )
         return
+@router.message(Command("stats"))
+async def cmd_stats(message: Message) -> None:
+    """Обработчик команды /stats. Показывает статистику выполнения привычек и серии (streak)."""
+
+@router.message(Command("chart"))
+async def cmd_chart(message: Message) -> None:
+    """Обработчик команды /chart. Генерирует и отправляет график выполнения привычек."""
 
     lines = ["📊 <b>Статистика за 7 дней:</b>\n"]
     total_done = 0

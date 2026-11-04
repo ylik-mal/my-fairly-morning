@@ -67,3 +67,22 @@ async def on_back(callback: CallbackQuery) -> None:
         reply_markup=habits_keyboard(habits, checkins)
     )
     await callback.answer()
+
+async def send_today(message: Message) -> None:
+    """Формирует и отправляет список привычек на сегодня с инлайн-кнопками."""
+
+@router.message(Command("today"))
+async def cmd_today(message: Message) -> None:
+    """Обработчик команды /today. Вызывает send_today."""
+
+@router.callback_query(F.data.startswith("checkin:"))
+async def on_habit_click(callback: CallbackQuery) -> None:
+    """Обработчик нажатия на привычку в /today. Показывает кнопки статуса (Сделано/Пропущено)."""
+
+@router.callback_query(F.data.startswith("set:"))
+async def on_status_set(callback: CallbackQuery) -> None:
+    """Обработчик выбора статуса привычки. Сохраняет отметку в БД и обновляет меню."""
+
+@router.callback_query(F.data == "back:today")
+async def on_back(callback: CallbackQuery) -> None:
+    """Обработчик кнопки 'Назад'. Возвращает к списку привычек на сегодня."""

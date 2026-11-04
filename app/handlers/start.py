@@ -27,6 +27,21 @@ async def cmd_start(message: Message) -> None:
         username=message.from_user.username,
         first_name=message.from_user.first_name,
     )
+@router.message(CommandStart())
+async def cmd_start(message: Message) -> None:
+    """Обработчик команды /start. Регистрирует пользователя и отправляет приветствие."""
+
+@router.callback_query(F.data == "welcome:add")
+async def welcome_add(callback: CallbackQuery) -> None:
+    """Обработчик кнопки 'Добавить привычку'. Показывает инструкцию по /add_habit."""
+
+@router.callback_query(F.data == "welcome:list")
+async def welcome_list(callback: CallbackQuery) -> None:
+    """Обработчик кнопки 'Мои привычки'. Показывает список привычек или просит добавить первую."""
+
+@router.callback_query(F.data == "welcome:help")
+async def welcome_help(callback: CallbackQuery) -> None:
+    """Обработчик кнопки 'Помощь'. Отправляет ссылку на /help и меню."""
 
     first_time = await is_new_user(message.from_user.id)
 

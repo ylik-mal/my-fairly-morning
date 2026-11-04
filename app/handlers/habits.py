@@ -29,7 +29,14 @@ async def cmd_add_habit(message: Message) -> None:
     await add_habit(message.from_user.id, title)
     await message.answer(f"✅ Привычка добавлена: <b>{title}</b>")
 
+@router.message(Command("add_habit"))
+async def cmd_add_habit(message: Message) -> None:
+    """Обработчик команды /add_habit. Добавляет новую привычку в БД."""
 
+@router.message(Command("my_habits"))
+async def cmd_my_habits(message: Message) -> None:
+    """Обработчик команды /my_habits. Выводит список привычек пользователя."""
+    
 @router.message(Command("my_habits"))
 async def cmd_my_habits(message: Message) -> None:
     habits = await get_user_habits(message.from_user.id)
