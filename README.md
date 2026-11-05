@@ -43,6 +43,54 @@ Telegram-бот для отслеживания привычек и вечерн
 - GitHub Actions (CI)
 - csv (экспорт данных)
 
+## Архитектура
+my_fairly_morning/
+├── app/
+│ ├── config.py # Загрузка BOT_TOKEN и PROXY из .env
+│ ├── database/
+│ │ └── db.py # Все SQL-запросы (aiosqlite)
+│ ├── handlers/ # Обработчики команд (aiogram routers)
+│ │ ├── start.py # /start, приветствие, кнопки
+│ │ ├── habits.py # /add_habit, /my_habits
+│ │ ├── checkins.py # /today, инлайн-кнопки
+│ │ ├── settings.py # /set_morning, /set_evening
+│ │ ├── reflection.py # /reflect, FSM-диалог
+│ │ ├── stats.py # /stats, /chart
+│ │ ├── words.py # /word, /topics
+│ │ ├── cookies.py # /cookie
+│ │ ├── export.py # /export
+│ │ ├── menu.py # /menu, разделы
+│ │ └── help.py # /help
+│ ├── keyboards/
+│ │ └── checkin.py # Инлайн-клавиатуры
+│ ├── scheduler/
+│ │ ├── runner.py # Запуск APScheduler
+│ │ └── tasks.py # Утренний дайджест, вечерняя рефлексия
+│ └── utils/
+│ ├── words.py # 151 слово, 5 тем
+│ ├── cookies.py # 30 мотивационных фраз
+│ ├── charts.py # Генерация графиков (matplotlib)
+│ └── csv_export.py # Экспорт в CSV
+├── tests/ # 21 тест (pytest)
+├── Dockerfile # Docker-образ
+├── docker-compose.yml # Запуск одной командой
+└── main.py # Точка входа, регистрация роутеров
+
+
+## Документация
+
+- **API-документация** — в docstrings каждой функции (PEP 257 + Google style).
+- **[ROADMAP.md](ROADMAP.md)** — план развития проекта на 10 недель.
+- **[PROGRESS.md](PROGRESS.md)** — трекер активности (дни, коммиты, тесты).
+- **[IDEAS.md](IDEAS.md)** — идеи для улучшения.
+- **[DEPLOY.md](DEPLOY.md)** — инструкция для развёртывания на VPS.
+
+### Запуск тестов
+
+```bash
+pytest -v
+```
+
 ## Слово дня
 Бот присылает одно слово в день из выбранной темы — с синонимами (от простого к сложному) и английскими переводами.
 
@@ -151,8 +199,3 @@ python main.py
 ```text
 PROXY=socks5://IP:PORT
 ```
-
-## Документация
-- ROADMAP.md — план развития проекта
-- PROGRESS.md — трекер активности
-- IDEAS.md — идеи для улучшения
