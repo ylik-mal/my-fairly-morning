@@ -541,3 +541,18 @@ async def get_habit_streak(habit_id: int, user_id: int) -> int:
             break
 
     return streak
+
+async def delete_habit(habit_id: int, telegram_id: int) -> None:
+    """
+    Удаляет привычку пользователя по её ID.
+
+    Args:
+        habit_id: ID привычки.
+        telegram_id: Telegram ID пользователя (для проверки владельца).
+    """
+    async with aiosqlite.connect(DB_PATH) as db:
+        await db.execute(
+            "DELETE FROM habits WHERE id = ? AND user_id = ?",
+            (habit_id, telegram_id),
+        )
+        await db.commit()
