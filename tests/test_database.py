@@ -139,3 +139,42 @@ async def test_reflection_updated():
 
     assert len(reflections) == 1
     assert reflections[0][1] == 9
+
+@pytest.mark.asyncio
+async def test_delete_habit():
+    """Проверяет, что привычка успешно удаляется из БД."""
+    # 1. Создаём пользователя и привычку
+    await db.get_or_create_user(123, "test", "Test")
+    await db.add_habit(123, "Временная привычка")
+
+    # 2. Убеждаемся, что она появилась
+    habits = await db.get_user_habits(123)
+    assert len(habits) == 1
+    habit_id = habits[0][0]
+
+    # 3. Удаляем её
+    await db.delete_habit(habit_id, 123)
+
+    # 4. Проверяем, что список пуст
+    habits_after = await db.get_user_habits(123)
+    assert len(habits_after) == 0
+
+
+@pytest.mark.asyncio
+async def test_delete_habit_wrong_user():
+    """Проверяет, что пользователь не может удалить чужую привычку."""
+    # Создаём двух пользователей
+    await db.get_or_create_user(123, "user1", "First")
+    await db.get_or_create_user(456, "user2", "Second")
+
+    # Первый добавляет привычку
+    await db.add_habit(123, "Привычка первого")
+    habits = await db.get_user_habits(123)
+    habit_id = habits[0][0]
+
+    # Второй пытается её удалить
+    await db.delete_habit(habit_id, 456)
+
+    # Проверяем, что привычка на месте
+    habits_after = await db.get_user_habits(123)
+    assert len(habits_after) == 1
