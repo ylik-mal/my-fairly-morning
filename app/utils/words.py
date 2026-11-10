@@ -267,6 +267,26 @@ WORDS_BY_TOPIC = {
             "synonyms": ["самоуверенный", "самодовольный", "надменный", "самонадеянный", "спесивый"],
             "english": ["overconfident", "smug", "arrogant", "presumptuous", "haughty"],
         },
+                "смирение": {
+            "synonyms": ["смирение", "покорность", "кротость", "спокойствие", "принятие"],
+            "english": ["humility", "meekness", "submission", "acceptance", "resignation"],
+        },
+        "ликование": {
+            "synonyms": ["ликование", "торжество", "восторг", "радость", "веселье"],
+            "english": ["jubilation", "exultation", "triumph", "rejoicing", "celebration"],
+        },
+        "отчаяние": {
+            "synonyms": ["отчаяние", "безысходность", "безнадежность", "упадок", "депрессия"],
+            "english": ["despair", "hopelessness", "despondency", "gloom", "depression"],
+        },
+        "умиление": {
+            "synonyms": ["умиление", "трогательность", "нежность", "растроганность", "теплота"],
+            "english": ["tenderness", "being touched", "affection", "warmth", "emotion"],
+        },
+        "предвкушение": {
+            "synonyms": ["предвкушение", "ожидание", "нетерпение", "надежда", "предчувствие"],
+            "english": ["anticipation", "expectation", "excitement", "waiting", "foretaste"],
+        }
     },
         "nature": {
         "солнце": {
