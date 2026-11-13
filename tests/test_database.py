@@ -178,3 +178,57 @@ async def test_delete_habit_wrong_user():
     # Проверяем, что привычка на месте
     habits_after = await db.get_user_habits(123)
     assert len(habits_after) == 1
+
+
+@pytest.mark.asyncio
+async def test_habit_streak():
+    """Проверяет правильный расчёт серии (streak) выполнения привычки."""
+    from datetime import date, timedelta
+    import aiosqlite
+
+    # 1. Подготовка: создаём пользователя и привычку
+    await db.get_or_create_user(123, "test", "Test")
+    await db.add_habit(123, "Тестовая привычка")
+    habits = await db.get_user_habits(123)
+    habit_id = habits[0][0]
+
+    # 2. Вручную заполняем БД отметками за 3 дня подряд (сегодня, вчера, позавчера)
+    today = date.today()
+    async with aiosqlite.connect(db.DB_PATH) as conn:
+        for i in range(3):
+            d = (today - timedelta(days=i)).isoformat()
+            await conn.execute(
+                "INSERT INTO checkins (habit_id, user_id, date, status) VALUES (?, ?, ?, ?)",
+                (habit_id, 123, d, "done")
+            )
+        await conn.commit()
+
+    # 3. Проверяем: серия должна быть 3 дня
+    streak = await db.get_habit_streak(habit_id, 123)
+    assert streak == 3
+
+    # 4. Добавляем пропуск (4 дня назад — пропущено), серия всё равно 3 (она прервётся только вчера)
+    async with aiosqlite.connect(db.DB_PATH) as conn:
+        d4 = (today - timedelta(days=4)).isoformat()
+        await conn.execute(
+            "INSERT INTO checkins (habit_id, user_id, date, status) VALUES (?, ?, ?, ?)",
+            (habit_id, 123, d4, "skipped")
+        )
+        await conn.commit()
+
+    streak_after = await db.get_habit_streak(habit_id, 123)
+    assert streak_after == 3  # ничего не изменилось, т.к. пропуск был раньше
+
+
+@pytest.mark.asyncio
+async def test_habit_streak_zero():
+    """Если привычка не выполнялась сегодня или вчера — серия 0."""
+    await db.get_or_create_user(123, "test", "Test")
+    await db.add_habit(123, "Новая привычка")
+    
+    habits = await db.get_user_habits(123)
+    habit_id = habits[0][0]
+
+    # Нет отметок вообще — серия 0
+    streak = await db.get_habit_streak(habit_id, 123)
+    assert streak == 0
