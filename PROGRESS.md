@@ -33,6 +33,8 @@
 - ✅ 21 тест (pytest)
 - ✅ GitHub Actions (CI)
 - ✅ Docstrings для всего кода (db, utils, handlers)
+- ✅ 6 тем слов (159 слов)
+- ✅ 25 тестов (pytest)
 
 ## План по неделям
 
