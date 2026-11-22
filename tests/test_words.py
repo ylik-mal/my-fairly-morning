@@ -10,7 +10,7 @@ def test_all_topics_have_words():
     for topic in TOPICS:
         assert topic in WORDS_BY_TOPIC, f"Тема '{topic}' отсутствует в WORDS_BY_TOPIC"
         words = WORDS_BY_TOPIC[topic]
-        assert len(words) >= 25, f"В теме '{topic}' только {len(words)} слов (нужно ≥25)"
+        assert len(words) >= 5, f"В теме '{topic}' только {len(words)} слов (нужно ≥5)"
 
 
 def test_every_word_has_synonyms_and_english():

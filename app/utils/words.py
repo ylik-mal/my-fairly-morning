@@ -7,6 +7,8 @@ TOPICS = {
     "nature": "🌿 Природа и погода",
     "mind": "🧠 Мышление и интеллект",
     "beauty": "✨ Красота и эстетика",
+    "technology": "💻 Технологии",
+    "food": "🍔 Еда и напитки",
 }
 
 # Словарь слов по темам.
@@ -652,6 +654,74 @@ WORDS_BY_TOPIC = {
         "умиротворяющий": {
             "synonyms": ["умиротворяющий", "успокаивающий", "тихий", "безмятежный", "ласковый"],
             "english": ["soothing", "calming", "serene", "peaceful", "tranquil"],
+        },    
+    },
+        "technology": {
+        "компьютер": {
+            "synonyms": ["компьютер", "ПК", "машина", "вычислитель", "электронно-вычислительная машина"],
+            "english": ["computer", "PC", "machine", "calculator", "hardware"],
+        },
+        "алгоритм": {
+            "synonyms": ["алгоритм", "метод", "порядок", "последовательность", "схема"],
+            "english": ["algorithm", "method", "procedure", "sequence", "scheme"],
+        },
+        "программа": {
+            "synonyms": ["программа", "софт", "приложение", "код", "ПО"],
+            "english": ["program", "software", "application", "code", "app"],
+        },
+        "интернет": {
+            "synonyms": ["интернет", "сеть", "паутина", "всемирная паутина", "онлайн"],
+            "english": ["internet", "web", "network", "cyberspace", "online"],
+        },
+        "данные": {
+            "synonyms": ["данные", "информация", "сведения", "факты", "контент"],
+            "english": ["data", "information", "facts", "content", "input"],
+        },
+        "нейросеть": {
+            "synonyms": ["нейросеть", "искусственный интеллект", "ИИ", "машинное обучение", "алгоритм"],
+            "english": ["neural network", "artificial intelligence", "AI", "machine learning", "algorithm"],
+        },
+        "инновация": {
+            "synonyms": ["инновация", "новшество", "нововведение", "прорыв", "технология"],
+            "english": ["innovation", "novelty", "breakthrough", "technology", "advancement"],
+        },
+        "робот": {
+            "synonyms": ["робот", "автомат", "андроид", "машина", "механизм"],
+            "english": ["robot", "automaton", "android", "machine", "mechanism"],
+        },
+    },
+        "food": {
+        "вкусный": {
+            "synonyms": ["вкусный", "аппетитный", "лакомый", "изысканный", "сочный"],
+            "english": ["tasty", "delicious", "savory", "exquisite", "luscious"],
+        },
+        "свежий": {
+            "synonyms": ["свежий", "новый", "недавний", "чистый", "прохладный"],
+            "english": ["fresh", "new", "recent", "crisp", "cool"],
+        },
+        "сладкий": {
+            "synonyms": ["сладкий", "сахарный", "приторный", "медовый", "десертный"],
+            "english": ["sweet", "sugary", "honeyed", "syrupy", "dessert"],
+        },
+        "солёный": {
+            "synonyms": ["солёный", "пересоленный", "пикантный", "острый", "пряный"],
+            "english": ["salty", "briny", "salted", "savory", "piquant"],
+        },
+        "горячий": {
+            "synonyms": ["горячий", "жгучий", "раскалённый", "обжигающий", "страстный"],
+            "english": ["hot", "scorching", "burning", "blazing", "fiery"],
+        },
+        "питательный": {
+            "synonyms": ["питательный", "полезный", "калорийный", "сытный", "витаминный"],
+            "english": ["nutritious", "healthy", "caloric", "hearty", "vitamin-rich"],
+        },
+        "пряный": {
+            "synonyms": ["пряный", "ароматный", "душистый", "острый", "пикантный"],
+            "english": ["spicy", "aromatic", "fragrant", "piquant", "zesty"],
+        },
+        "сочный": {
+            "synonyms": ["сочный", "мясистый", "насыщенный", "влажный", "аппетитный"],
+            "english": ["juicy", "succulent", "rich", "moist", "luscious"],
         },
     },
 }
