@@ -50,3 +50,6 @@ Activate.ps1
 
 # Pytest
 .pytest_cache/
+
+# Generated reports
+report.csv
