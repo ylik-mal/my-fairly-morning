@@ -64,12 +64,13 @@
 - [ ] Verify 24/7 operation
 - [ ] Setup auto-restart
 
-## 📅 Week 9 — CI/CD (18.11–24.11)
+## ✅ Week 9 — CI/CD (18.11–24.11)
 
-- [ ] GitHub Actions: auto-deploy
-- [ ] Tests coverage report
+- [x] Quality CI (tests)
+- [x] Project CI (report artifact)
+- [x] AI declaration in README
+- [ ] Auto-deploy (отложен)
 - [ ] Logging improvements
-- [ ] Error monitoring
 
 ## 📅 Week 10 — Final (25.11–20.12)
 
