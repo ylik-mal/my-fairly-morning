@@ -512,6 +512,17 @@ The downloaded artifact contains:
 
 As per the assignment requirements, AI tools were used during the development of this project.
 
+## 🛠️ Response to CI Findings
+
+During the CI setup, several issues were identified and fixed:
+
+- **63 linter errors** (imports, duplicates, unused variables) — fixed with `ruff`.
+- **58 mypy errors** (Optional types in aiogram) — resolved by configuring `mypy.ini`.
+- **Duplicate functions** in `start.py`, `checkins.py`, `stats.py` — removed.
+- **Missing imports** — added.
+
+All fixes are visible in the commit history. Final CI runs pass with **zero errors**.
+
 ### Tools used
 
 | Tool | Purpose |
