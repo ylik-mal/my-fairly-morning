@@ -59,3 +59,7 @@ report.csv
 .coverage.*
 htmlcov/
 coverage.xml
+
+# Generated demo reports
+demo_artifacts/
+demo-report.log

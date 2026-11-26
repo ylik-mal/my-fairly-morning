@@ -131,41 +131,36 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Generate report
+      - name: Generate and validate demo report
         env:
           BOT_TOKEN: "test_token_for_ci"
-          DB_PATH: "ci_demo.db"
           MPLBACKEND: "Agg"
-        run: python scripts/generate_report.py
+        run: |
+          set -o pipefail
+          python scripts/demo_report.py 2>&1 | tee demo-report.log
 
       - name: Verify generated artifacts
         run: |
-          test -s report.csv
-          test -s report_chart.png
-          echo "Report and chart generated successfully."
+          test -s demo_artifacts/habits.csv
+          test -s demo_artifacts/reflections.csv
+          test -s demo_artifacts/report.json
+          test -s demo_artifacts/report_chart.png
 
-      - name: Upload report and chart
+          python -m json.tool demo_artifacts/report.json
+
+          echo "All four artifacts verified."
+
+      - name: Upload project artifacts
         uses: actions/upload-artifact@v6
         with:
           name: project-report
           path: |
-            report.csv
-            report_chart.png
+            demo_artifacts/
+            demo-report.log
           if-no-files-found: error
           retention-days: 90
 
       - name: Generate Project Summary
         if: success()
         run: |
-          {
-            echo "## 📊 Project CI Results"
-            echo ""
-            echo "Report generation completed successfully."
-            echo ""
-            echo "| Artifact | Description |"
-            echo "| --- | --- |"
-            echo "| report.csv | Project metrics |"
-            echo "| report_chart.png | Metrics visualization |"
-            echo ""
-            echo "Download the project-report artifact to inspect the results."
-          } >> "$GITHUB_STEP_SUMMARY"
+          python scripts/project_summary.py >> "$GITHUB_STEP_SUMMARY"
