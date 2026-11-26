@@ -729,17 +729,6 @@ WORDS_BY_TOPIC = {
 def get_word_of_the_day(topic: str, for_date: date | None = None) -> tuple[str, dict]:
     """
     Возвращает слово дня из указанной темы.
-
-    Выбор слова основан на дне года — для одной и той же даты
-    и темы всегда возвращается одно и то же слово.
-
-    Args:
-        topic: Ключ темы (например, "emotions", "character").
-        for_date: Дата для выбора (по умолчанию — сегодня).
-
-    Returns:
-        Кортеж (слово, данные), где данные — dict с ключами
-        "synonyms" (список синонимов) и "english" (список переводов).
     """
     if for_date is None:
         for_date = date.today()
@@ -747,7 +736,7 @@ def get_word_of_the_day(topic: str, for_date: date | None = None) -> tuple[str, 
     words = WORDS_BY_TOPIC.get(topic) or WORDS_BY_TOPIC["emotions"]
 
     if not words:
-        words = WORDS_BY_TOPIC["emotions"]
+        raise ValueError("В теме emotions нет слов для выбора.")
 
     words_list = list(words.items())
     day_of_year = for_date.timetuple().tm_yday

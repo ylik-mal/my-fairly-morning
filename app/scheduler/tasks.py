@@ -1,5 +1,6 @@
 import logging
 from datetime import datetime
+from zoneinfo import ZoneInfo
 
 from aiogram import Bot
 from aiogram.fsm.context import FSMContext
@@ -19,11 +20,12 @@ from app.utils.cookies import get_random_cookie
 from app.utils.words import get_word_of_the_day
 
 logger = logging.getLogger(__name__)
+TIMEZONE = ZoneInfo("Europe/Samara")
 
 
 async def send_morning_digest(bot: Bot) -> None:
     """Проверяет, кому сейчас нужно отправить утренний дайджест."""
-    now = datetime.now().strftime("%H:%M")
+    now = datetime.now(TIMEZONE).strftime("%H:%M")
     user_ids = await get_users_with_morning_time(now)
 
     if not user_ids:
@@ -78,7 +80,7 @@ async def send_morning_digest(bot: Bot) -> None:
 
 async def send_evening_reflection(bot: Bot, dp) -> None:
     """Проверяет, кому сейчас нужно начать вечернюю рефлексию."""
-    now = datetime.now().strftime("%H:%M")
+    now = datetime.now(TIMEZONE).strftime("%H:%M")
     user_ids = await get_users_with_evening_time(now)
 
     if not user_ids:

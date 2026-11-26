@@ -64,3 +64,23 @@ def test_all_topics_return_valid_word():
         assert word, f"Пустое слово для темы '{topic}'"
         assert "synonyms" in data, f"Нет synonyms для '{topic}'"
         assert "english" in data, f"Нет english для '{topic}'"
+
+def test_get_word_of_the_day_without_date():
+    """Без даты используется текущая дата."""
+    word, data = get_word_of_the_day("emotions")
+
+    assert word
+    assert "synonyms" in data
+    assert "english" in data
+
+
+def test_get_word_of_the_day_empty_fallback(monkeypatch):
+    """Если резервная тема пустая, возникает понятная ошибка."""
+    monkeypatch.setitem(WORDS_BY_TOPIC, "emotions", {})
+
+    try:
+        get_word_of_the_day("unknown_topic")
+    except ValueError as error:
+        assert str(error) == "В теме emotions нет слов для выбора."
+    else:
+        raise AssertionError("Ожидалась ошибка ValueError")

@@ -9,6 +9,7 @@ from app.database.db import add_habit, delete_habit, get_user_habits
 router = Router()
 
 
+
 @router.message(Command("add_habit"))
 async def cmd_add_habit(message: Message) -> None:
     """Добавляет новую привычку в БД."""
@@ -25,10 +26,6 @@ async def cmd_add_habit(message: Message) -> None:
         return
 
     title = parts[1].strip()
-
-    if not title:
-        await message.answer("Название привычки не может быть пустым.")
-        return
 
     await add_habit(message.from_user.id, title)
     await message.answer(f"✅ Привычка добавлена: <b>{title}</b>")
