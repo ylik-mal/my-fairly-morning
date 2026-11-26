@@ -53,3 +53,9 @@ Activate.ps1
 
 # Generated reports
 report.csv
+
+# Test coverage
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml

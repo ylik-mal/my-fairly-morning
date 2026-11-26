@@ -9,6 +9,7 @@ from datetime import date
 
 import aiosqlite
 import matplotlib
+
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
