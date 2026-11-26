@@ -232,3 +232,208 @@ async def test_habit_streak_zero():
     # Нет отметок вообще — серия 0
     streak = await db.get_habit_streak(habit_id, 123)
     assert streak == 0
+
+
+@pytest.mark.asyncio
+async def test_morning_time_default():
+    """По умолчанию время утреннего уведомления не задано."""
+    await db.get_or_create_user(123, "test", "Test")
+
+    assert await db.get_morning_time(123) is None
+
+
+@pytest.mark.asyncio
+async def test_morning_time_saved():
+    """Время утреннего уведомления сохраняется."""
+    await db.get_or_create_user(123, "test", "Test")
+    await db.set_morning_time(123, "08:00")
+
+    assert await db.get_morning_time(123) == "08:00"
+
+
+@pytest.mark.asyncio
+async def test_morning_time_updated():
+    """Новое время заменяет предыдущее."""
+    await db.get_or_create_user(123, "test", "Test")
+    await db.set_morning_time(123, "08:00")
+    await db.set_morning_time(123, "09:30")
+
+    assert await db.get_morning_time(123) == "09:30"
+
+
+@pytest.mark.asyncio
+async def test_users_with_morning_time():
+    """Выбираются только пользователи с нужным временем."""
+    await db.get_or_create_user(123, "first", "First")
+    await db.get_or_create_user(456, "second", "Second")
+    await db.get_or_create_user(789, "third", "Third")
+
+    await db.set_morning_time(123, "08:00")
+    await db.set_morning_time(456, "09:00")
+    await db.set_morning_time(789, "08:00")
+
+    users = await db.get_users_with_morning_time("08:00")
+
+    assert sorted(users) == [123, 789]
+
+
+@pytest.mark.asyncio
+async def test_evening_time_default():
+    """По умолчанию время вечерней рефлексии не задано."""
+    await db.get_or_create_user(123, "test", "Test")
+
+    assert await db.get_evening_time(123) is None
+
+
+@pytest.mark.asyncio
+async def test_evening_time_saved():
+    """Время вечерней рефлексии сохраняется."""
+    await db.get_or_create_user(123, "test", "Test")
+    await db.set_evening_time(123, "21:00")
+
+    assert await db.get_evening_time(123) == "21:00"
+
+
+@pytest.mark.asyncio
+async def test_evening_time_updated():
+    """Время вечерней рефлексии можно изменить."""
+    await db.get_or_create_user(123, "test", "Test")
+    await db.set_evening_time(123, "21:00")
+    await db.set_evening_time(123, "22:30")
+
+    assert await db.get_evening_time(123) == "22:30"
+
+
+@pytest.mark.asyncio
+async def test_users_with_evening_time():
+    """Выбираются пользователи с нужным временем рефлексии."""
+    await db.get_or_create_user(123, "first", "First")
+    await db.get_or_create_user(456, "second", "Second")
+    await db.get_or_create_user(789, "third", "Third")
+
+    await db.set_evening_time(123, "21:00")
+    await db.set_evening_time(456, "22:00")
+    await db.set_evening_time(789, "21:00")
+
+    users = await db.get_users_with_evening_time("21:00")
+
+    assert sorted(users) == [123, 789]
+
+
+@pytest.mark.asyncio
+async def test_morning_and_evening_independent():
+    """Изменение одного уведомления не влияет на другое."""
+    await db.get_or_create_user(123, "test", "Test")
+
+    await db.set_morning_time(123, "08:00")
+    await db.set_evening_time(123, "21:00")
+    await db.set_morning_time(123, "09:00")
+
+    assert await db.get_morning_time(123) == "09:00"
+    assert await db.get_evening_time(123) == "21:00"
+
+
+@pytest.mark.asyncio
+async def test_word_topic_default():
+    """Тема слова дня по умолчанию — emotions."""
+    await db.get_or_create_user(123, "test", "Test")
+
+    assert await db.get_word_topic(123) == "emotions"
+
+
+@pytest.mark.asyncio
+async def test_word_topic_saved():
+    """Выбранная тема слова дня сохраняется."""
+    await db.get_or_create_user(123, "test", "Test")
+    await db.set_word_topic(123, "character")
+
+    assert await db.get_word_topic(123) == "character"
+
+
+@pytest.mark.asyncio
+async def test_word_topic_updated():
+    """Пользователь может изменить выбранную тему."""
+    await db.get_or_create_user(123, "test", "Test")
+
+    await db.set_word_topic(123, "character")
+    await db.set_word_topic(123, "emotions")
+
+    assert await db.get_word_topic(123) == "emotions"
+
+
+@pytest.mark.asyncio
+async def test_word_topic_independent():
+    """Выбор темы одного пользователя не влияет на другого."""
+    await db.get_or_create_user(123, "first", "First")
+    await db.get_or_create_user(456, "second", "Second")
+
+    await db.set_word_topic(123, "character")
+
+    assert await db.get_word_topic(123) == "character"
+    assert await db.get_word_topic(456) == "emotions"
+
+
+@pytest.mark.asyncio
+async def test_habit_streak_from_yesterday():
+    """Серия сохраняется, если сегодня привычка ещё не отмечена."""
+    from datetime import date, timedelta
+
+    await db.get_or_create_user(123, "test", "Test")
+    await db.add_habit(123, "Чтение")
+
+    habits = await db.get_user_habits(123)
+    habit_id = habits[0][0]
+
+    today = date.today()
+
+    async with aiosqlite.connect(db.DB_PATH) as conn:
+        for i in range(1, 3):
+            day = (today - timedelta(days=i)).isoformat()
+
+            await conn.execute(
+                """
+                INSERT INTO checkins
+                (habit_id, user_id, date, status)
+                VALUES (?, ?, ?, ?)
+                """,
+                (habit_id, 123, day, "done"),
+            )
+
+        await conn.commit()
+
+    streak = await db.get_habit_streak(habit_id, 123)
+
+    assert streak == 2
+
+
+@pytest.mark.asyncio
+async def test_habit_streak_with_gap():
+    """Пропущенный день прерывает непрерывную серию."""
+    from datetime import date, timedelta
+
+    await db.get_or_create_user(123, "test", "Test")
+    await db.add_habit(123, "Чтение")
+
+    habits = await db.get_user_habits(123)
+    habit_id = habits[0][0]
+
+    today = date.today()
+
+    async with aiosqlite.connect(db.DB_PATH) as conn:
+        for i in [0, 1, 3]:
+            day = (today - timedelta(days=i)).isoformat()
+
+            await conn.execute(
+                """
+                INSERT INTO checkins
+                (habit_id, user_id, date, status)
+                VALUES (?, ?, ?, ?)
+                """,
+                (habit_id, 123, day, "done"),
+            )
+
+        await conn.commit()
+
+    streak = await db.get_habit_streak(habit_id, 123)
+
+    assert streak == 2
