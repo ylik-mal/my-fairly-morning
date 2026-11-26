@@ -1,282 +1,153 @@
+# My Fairly Morning 🌅
 
 [![Tests](https://github.com/ylik-mal/my-fairly-morning/actions/workflows/tests.yml/badge.svg)](https://github.com/ylik-mal/my-fairly-morning/actions/workflows/tests.yml)
 ![Python](https://img.shields.io/badge/Python-3.12-blue)
 ![aiogram](https://img.shields.io/badge/aiogram-3.x-blue)
 ![Database](https://img.shields.io/badge/Database-SQLite-lightgrey)
-![Docker](https://img.shields.io/badge/Docker-supported-blue)
 
-# My Fairly Morning 🌅
+**My Fairly Morning** — Telegram-бот для формирования полезных привычек, ежедневной рефлексии и личностного развития.
 
-Telegram-бот для отслеживания привычек, вечерней рефлексии и личностного развития.
-
-My Fairly Morning помогает формировать полезные привычки, анализировать прошедший день, отслеживать собственный прогресс и расширять словарный запас.
-
-## 💡 Idea
-
-My Fairly Morning is a Telegram bot designed to combat the chaos of daily routines. It combines three psychological concepts:
-
-1. **Habit tracking** — building discipline through daily check-ins.
-2. **Evening reflection** — developing mindfulness and self-analysis.
-3. **Vocabulary expansion** — learning daily words with synonyms and English translations.
-
-The bot doesn't just send reminders; it creates a supportive environment for personal growth through gamification, progress visualization, streaks, and daily motivational fortune cookies.
-
-<p align="center">
-  <img src="docs/screenshots/02_start.jpg" width="280" alt="Старт"/>
-  <img src="docs/screenshots/03_today.jpg" width="280" alt="Ежедневные отметки"/>
-</p>
-
-<p align="center">
-  <img src="docs/screenshots/04_chart.jpg" width="500" alt="График выполнения привычек"/>
-</p>
-
-## 📑 Содержание
-
-- [Возможности](#-возможности)
-- [Меню команд](#-меню-команд)
-- [Слово дня](#-слово-дня)
-- [Печенька с предсказанием](#-печенька-с-предсказанием)
-- [Экспорт данных](#-экспорт-данных)
-- [Технологический стек](#-технологический-стек)
-- [Архитектура проекта](#-архитектура-проекта)
-- [Установка и запуск](#-установка-и-запуск)
-- [Docker](#-docker)
-- [Работа через прокси](#-работа-через-прокси)
-- [Тестирование](#-тестирование)
-- [CI/CD](#-cicd)
-- [How to verify CI/CD](#-how-to-verify-cicd)
-- [AI Models & Tools Declaration](#-ai-models--tools-declaration)
-- [Документация](#-документация)
+Проект помогает организовать повседневную жизнь, отслеживать прогресс, анализировать результаты и постепенно формировать устойчивые привычки.
 
 ## ✨ Возможности
 
 ### Отслеживание привычек
-
 - Добавление и удаление привычек.
-- Просмотр списка активных привычек.
-- Ежедневные отметки «Сделано» и «Пропустить».
-- Персональный утренний дайджест.
-- Настройка времени уведомлений.
+- Ежедневная отметка выполнения.
+- Возможность пропустить выполнение.
+- Подсчёт серий выполнения (streak).
+- Персональная статистика.
 
-### Вечерняя рефлексия
-
-- Интерактивный диалог на основе FSM.
+### Ежедневная рефлексия
+- Интерактивный диалог с пользователем.
 - Оценка прошедшего дня.
-- Анализ достижений и трудностей.
-- Просмотр истории рефлексий.
+- Фиксация достижений и трудностей.
+- История предыдущих рефлексий.
 
-### Статистика и аналитика
+### Уведомления
+- Настройка времени утреннего дайджеста.
+- Настройка времени вечерней рефлексии.
+- Автоматические уведомления.
 
-- Статистика выполнения привычек за 7 дней.
-- Визуализация прогресса с помощью графиков.
-- Экспорт привычек и рефлексий в CSV.
+### Аналитика
+- Статистика за последние 7 дней.
+- Графики выполнения привычек.
+- Экспорт данных в CSV.
+- Формирование аналитических отчётов.
 
 ### Личностное развитие
-
-- Слово дня с синонимами и английскими переводами.
-- 167 слов в 7 тематических категориях.
-- 35 мотивационных предсказаний.
-- Удобное интерактивное меню.
-
-## 📱 Меню команд
-
-<p align="center">
-  <img src="docs/screenshots/01_menu.jpg" width="300" alt="Меню команд"/>
-</p>
-
-| Команда | Описание |
-| --- | --- |
-| `/start` | Запуск бота и приветствие |
-| `/menu` | Интерактивное меню |
-| `/help` | Справка по командам |
-| `/add_habit` | Добавить привычку |
-| `/my_habits` | Просмотреть список привычек |
-| `/delete_habit` | Удалить привычку |
-| `/today` | Отметить выполнение привычек |
-| `/set_morning HH:MM` | Настроить время утреннего дайджеста |
-| `/set_evening HH:MM` | Настроить время вечерней рефлексии |
-| `/reflect` | Начать вечернюю рефлексию |
-| `/my_reflections` | Просмотреть историю рефлексий |
-| `/stats` | Получить статистику за 7 дней |
-| `/chart` | Построить график выполнения привычек |
-| `/word` | Получить слово дня |
-| `/topics` | Выбрать тему для слова дня |
-| `/cookie` | Получить мотивационное предсказание |
-| `/export` | Экспортировать данные в CSV |
-
-## 📚 Слово дня
-
-Бот предлагает ежедневно изучать новое слово из выбранной тематической категории.
-
-Каждое слово сопровождается синонимами, расположенными от простых к более сложным, и английскими переводами.
-
-### Доступные темы
-
-| Тема | Количество слов |
-| --- | ---: |
-| 🎭 Эмоции и чувства | 29 |
-| 💪 Характер человека | 32 |
-| 🌿 Природа и погода | 30 |
-| 🧠 Мышление и интеллект | 30 |
-| ✨ Красота и эстетика | 30 |
-| 💻 Технологии | 8 |
-| 🍔 Еда и напитки | 8 |
-| **Всего** | **167** |
-
-Для смены тематической категории используется команда `/topics`.
-
-### Пример
-
-```text
-📚 Слово дня: КРАСИВЫЙ
-
-красивый → милый → пригожий → живописный
-→ великолепный → божественный
-
-🇬🇧 beautiful / pretty / handsome /
-picturesque / magnificent / gorgeous
-```
-
-## 🥠 Печенька с предсказанием
-
-Команда `/cookie` позволяет получить случайное мотивационное предсказание из коллекции из 35 фраз.
-
-Печенька также автоматически добавляется в утренний дайджест.
-
-### Пример
-
-```text
-🥠 Твоё предсказание на сегодня:
-
-«Сегодня отличный день, чтобы начать что-то новое.
-Не откладывай мечты — сделай первый шаг!»
-
-🍀 Удачного дня!
-```
-
-## 📊 Экспорт данных
-
-Команда `/export` позволяет выгрузить персональные данные в формате CSV для дальнейшего анализа в Microsoft Excel или Google Sheets.
-
-### Экспорт привычек
-
-- Название привычки.
-- Количество выполнений за последние 30 дней.
-- Количество пропусков.
-- Процент выполнения.
-- Статус выполнения за текущий день.
-
-### Экспорт рефлексий
-
-- Дата рефлексии.
-- Оценка дня.
-- Что удалось.
-- Что не получилось.
-
-### Как использовать
-
-1. Отправить команду `/export`.
-2. Выбрать тип данных: привычки или рефлексии.
-3. Получить CSV-файл непосредственно в Telegram.
+- Слово дня.
+- Тематические категории слов.
+- Мотивационные предсказания.
 
 ## 🛠 Технологический стек
 
 | Технология | Назначение |
-| --- | --- |
-| Python 3.12 | Основной язык программирования |
-| aiogram 3.x | Асинхронная работа с Telegram Bot API |
-| SQLite | Хранение пользовательских данных |
-| aiosqlite | Асинхронная работа с базой данных |
-| APScheduler | Планирование уведомлений и дайджестов |
-| matplotlib | Построение графиков |
-| pytest | Автоматизированное тестирование |
-| pytest-asyncio | Тестирование асинхронного кода |
-| pytest-cov | Анализ покрытия кода тестами |
-| ruff | Линтинг и проверка качества кода |
-| mypy | Статическая проверка типов |
-| GitHub Actions | Автоматизация CI/CD |
-| Docker | Контейнеризация приложения |
-| Docker Compose | Управление запуском контейнера |
+|---|---|
+| Python 3.12 | Основной язык |
+| aiogram 3 | Telegram Bot API |
+| SQLite | Хранение данных |
+| aiosqlite | Асинхронная работа с БД |
+| APScheduler | Планирование уведомлений |
+| matplotlib | Визуализация данных |
+| pytest | Автоматизированные тесты |
+| pytest-asyncio | Асинхронное тестирование |
+| pytest-cov | Анализ покрытия |
+| Ruff | Линтинг |
+| Mypy | Статическая проверка типов |
+| GitHub Actions | CI/CD |
 
 ## 🏗 Архитектура проекта
 
-Проект имеет модульную архитектуру с разделением обработчиков команд, работы с базой данных, планировщика задач и вспомогательных функций.
+Проект построен на модульной архитектуре.
 
 ```text
 my_fairly_morning/
+│
 ├── app/
-│   ├── config.py               # Загрузка конфигурации из .env
+│   ├── config.py
 │   │
 │   ├── database/
-│   │   └── db.py               # SQL-запросы и работа с SQLite
+│   │   ├── __init__.py
+│   │   ├── db.py
+│   │   └── models.py
 │   │
-│   ├── handlers/               # Обработчики команд
-│   │   ├── start.py            # Приветствие и запуск бота
-│   │   ├── habits.py           # Управление привычками
-│   │   ├── checkins.py         # Ежедневные отметки
-│   │   ├── settings.py         # Настройка уведомлений
-│   │   ├── reflection.py       # FSM-диалог рефлексии
-│   │   ├── stats.py            # Статистика и графики
-│   │   ├── words.py            # Слово дня и темы
-│   │   ├── cookies.py          # Мотивационные предсказания
-│   │   ├── export.py           # Экспорт данных
-│   │   ├── menu.py             # Интерактивное меню
-│   │   └── help.py             # Справка по командам
+│   ├── handlers/
+│   │   ├── start.py
+│   │   ├── habits.py
+│   │   ├── checkins.py
+│   │   ├── settings.py
+│   │   ├── reflection.py
+│   │   ├── stats.py
+│   │   ├── words.py
+│   │   ├── cookies.py
+│   │   ├── export.py
+│   │   ├── menu.py
+│   │   └── help.py
 │   │
 │   ├── keyboards/
-│   │   └── checkin.py          # Inline-клавиатуры
+│   │   ├── checkin.py
+│   │   └── inline.py
 │   │
 │   ├── scheduler/
-│   │   ├── runner.py           # Запуск APScheduler
-│   │   └── tasks.py            # Запланированные уведомления
+│   │   ├── runner.py
+│   │   └── tasks.py
 │   │
 │   └── utils/
-│       ├── words.py            # 167 слов в 7 категориях
-│       ├── cookies.py          # 35 мотивационных фраз
-│       ├── charts.py           # Генерация графиков
-│       └── csv_export.py       # Формирование CSV-файлов
+│       ├── charts.py
+│       ├── cookies.py
+│       ├── csv_export.py
+│       └── words.py
 │
 ├── scripts/
-│   └── generate_report.py      # Генерация отчётов Project CI
+│   ├── generate_report.py
+│   ├── demo_report.py
+│   └── project_summary.py
 │
-├── tests/                      # 26 автоматизированных тестов
-├── docs/
-│   └── screenshots/            # Скриншоты интерфейса
+├── tests/
+│   ├── conftest.py
+│   ├── test_database.py
+│   ├── test_export.py
+│   ├── test_charts.py
+│   └── ...
 │
-├── Dockerfile                  # Конфигурация Docker-образа
-├── docker-compose.yml          # Запуск через Docker Compose
-├── requirements.txt            # Зависимости проекта
-├── mypy.ini                    # Настройки проверки типов
-├── .env.example                # Пример конфигурации
-├── main.py                     # Точка входа приложения
-├── ROADMAP.md                  # План развития
-├── PROGRESS.md                 # Трекер активности
-├── IDEAS.md                    # Идеи для развития
-├── DEPLOY.md                   # Инструкция по развёртыванию
-└── README.md                   # Документация проекта
+├── .github/
+│   └── workflows/
+│       └── tests.yml
+│
+├── main.py
+├── requirements.txt
+├── .env.example
+├── Dockerfile
+├── docker-compose.yml
+├── README.md
+├── ROADMAP.md
+├── PROGRESS.md
+├── IDEAS.md
+└── DEPLOY.md
 ```
 
 ### Основные компоненты
 
 | Компонент | Ответственность |
-| --- | --- |
-| `handlers` | Обработка команд и взаимодействие с пользователем |
-| `database` | Хранение и получение данных |
-| `keyboards` | Формирование интерактивных клавиатур |
-| `scheduler` | Выполнение запланированных задач |
-| `utils` | Вспомогательные функции и обработка данных |
-| `tests` | Проверка корректности работы приложения |
-| `scripts` | Автоматизация формирования отчётов |
+|---|---|
+| handlers | Обработка команд и действий пользователя |
+| database | Работа с SQLite |
+| keyboards | Интерактивные клавиатуры |
+| scheduler | Планирование уведомлений |
+| utils | Вспомогательные функции |
+| scripts | Генерация аналитических отчётов |
+| tests | Проверка корректности работы |
 
 ## 🚀 Установка и запуск
 
 ### Требования
 
-- Python 3.12.
-- Git.
-- Telegram Bot Token, полученный через [@BotFather](https://t.me/BotFather).
+- Python 3.12
+- Git
+- Telegram Bot Token от [@BotFather](https://t.me/BotFather)
 
-### 1. Клонирование репозитория
+### 1. Клонирование проекта
 
 ```bash
 git clone https://github.com/ylik-mal/my-fairly-morning.git
@@ -289,284 +160,284 @@ cd my-fairly-morning
 python -m venv venv
 ```
 
-Активация виртуального окружения:
-
-**Windows (PowerShell):**
+Активация в Windows PowerShell:
 
 ```powershell
 .\venv\Scripts\Activate.ps1
 ```
 
-**macOS / Linux:**
-
-```bash
-source venv/bin/activate
-```
-
 ### 3. Установка зависимостей
 
 ```bash
-pip install -r requirements.txt
+python -m pip install -r requirements.txt
 ```
 
-### 4. Настройка переменных окружения
+### 4. Настройка окружения
 
-Создайте файл `.env` на основе `.env.example`.
-
-**Windows (PowerShell):**
+Создайте файл `.env`:
 
 ```powershell
 Copy-Item .env.example .env
 ```
 
-**macOS / Linux:**
-
-```bash
-cp .env.example .env
-```
-
-Укажите необходимые параметры:
+Укажите настройки:
 
 ```dotenv
-BOT_TOKEN=your_telegram_bot_token_here
+BOT_TOKEN=your_telegram_bot_token
+DB_PATH=bot.db
 PROXY=
 ```
 
-| Переменная | Описание | Обязательная |
-| --- | --- | --- |
-| `BOT_TOKEN` | Токен Telegram-бота | Да |
-| `PROXY` | Адрес SOCKS5-прокси | Нет |
+| Переменная | Описание |
+|---|---|
+| BOT_TOKEN | Токен Telegram-бота |
+| DB_PATH | Путь к базе данных |
+| PROXY | Необязательный адрес прокси |
 
-> [!IMPORTANT]
-> Не публикуйте файл `.env` и токен Telegram-бота в открытом репозитории. Конфиденциальные данные должны храниться в переменных окружения.
+**Важно:** не публикуйте токен бота и файл `.env` в открытом репозитории.
 
-### 5. Запуск приложения
+### 5. Запуск
 
 ```bash
 python main.py
 ```
 
-После запуска откройте своего бота в Telegram и отправьте команду `/start`.
+После запуска откройте бота в Telegram и отправьте `/start`.
 
-## 🐳 Docker
+## 🧪 Тестирование и качество кода
 
-Проект поддерживает запуск в контейнере с помощью Docker и Docker Compose.
+Для проверки проекта используются три основных инструмента:
 
-### Требования
+- Ruff — проверка стиля и качества кода.
+- Mypy — статическая проверка типов.
+- Pytest — автоматизированное тестирование.
 
-- Docker.
-- Docker Compose.
-- Настроенный файл `.env`.
+### Запуск проверок
 
-### Запуск
-
-```bash
-docker compose up -d
-```
-
-### Просмотр логов
-
-```bash
-docker compose logs -f
-```
-
-### Проверка состояния контейнера
-
-```bash
-docker compose ps
-```
-
-### Перезапуск
-
-```bash
-docker compose restart
-```
-
-### Остановка
-
-```bash
-docker compose down
-```
-
-Подробная инструкция по развёртыванию на сервере находится в файле [DEPLOY.md](DEPLOY.md).
-
-## 🌐 Работа через прокси
-
-В регионах, где прямое подключение к `api.telegram.org` недоступно, бот поддерживает подключение через SOCKS5-прокси.
-
-Для настройки укажите адрес прокси в файле `.env`:
-
-```dotenv
-PROXY=socks5://IP:PORT
-```
-
-Если прокси не требуется, оставьте значение переменной пустым:
-
-```dotenv
-PROXY=
-```
-
-## 🧪 Тестирование
-
-Для проверки качества и корректности работы приложения используются автоматизированные тесты, линтер и статический анализатор типов.
-
-В проекте реализовано **26 автоматизированных тестов**.
-
-### Запуск тестов
-
-```bash
-python -m pytest tests/ -v
-```
-
-### Проверка покрытия кода тестами
-
-```bash
-python -m pytest tests/ --cov=app --cov-report=term-missing
-```
-
-### Проверка качества кода
+Проверка Ruff:
 
 ```bash
 ruff check .
 ```
 
-### Статическая проверка типов
+Проверка типов:
 
 ```bash
 mypy app
 ```
 
-## ⚙️ CI/CD
+Запуск всех тестов:
 
-В проекте настроен автоматизированный CI/CD-процесс на базе GitHub Actions.
+```bash
+python -m pytest -v
+```
 
-Процесс состоит из двух последовательных этапов: **Quality CI** и **Project CI**.
+Запуск тестов с анализом покрытия:
 
-### Quality CI
+```bash
+python -m pytest -q --cov=app --cov-report=term-missing
+```
 
-Запускается при каждом push в ветку `main`.
+### Текущие результаты
+
+Последняя локальная проверка проекта:
+
+| Проверка | Результат |
+|---|---|
+| Ruff | Passed |
+| Mypy | Passed |
+| Pytest | 165 passed |
+| Проверяемые файлы Mypy | 28 |
+| Общее покрытие кода | 62% |
+
+Некоторые модули приложения пока имеют неполное покрытие тестами. Это направление для дальнейшего улучшения качества проекта.
+
+Также присутствуют предупреждения DeprecationWarning от зависимостей Matplotlib и Pyparsing. Они не мешают успешному прохождению тестов.
+
+## ⚙️ CI/CD — GitHub Actions
+
+В проекте настроен автоматизированный процесс проверки качества и формирования аналитических отчётов.
+
+Workflow находится в:
+
+`.github/workflows/tests.yml`
+
+Запуск происходит при:
+- Push в `main`.
+- Pull Request в `main`.
+- Ручном запуске через GitHub Actions.
+
+### 1. Quality CI
+
+Первый этап отвечает за качество исходного кода.
 
 Включает:
 
-- Проверку качества кода с помощью `ruff`.
-- Статическую проверку типов с помощью `mypy`.
-- Запуск 26 автоматизированных тестов с помощью `pytest`.
-- Формирование отчёта о покрытии кода тестами.
+1. Установку зависимостей.
+2. Проверку Ruff.
+3. Проверку Mypy.
+4. Запуск Pytest.
+5. Сбор покрытия кода.
+6. Формирование логов и отчётов.
 
-### Project CI
+Результаты сохраняются в артефакт `quality-report`.
 
-Запускается после успешного прохождения Quality CI.
+### 2. Project CI
+
+Второй этап запускается только после успешного завершения Quality CI.
+
+Он отвечает за демонстрацию аналитических возможностей проекта.
 
 Включает:
 
-- Запуск скрипта `scripts/generate_report.py`.
-- Генерацию отчёта `report.csv`.
-- Генерацию графика `report_chart.png`.
-- Загрузку результатов в качестве артефакта GitHub Actions.
+1. Запуск `scripts/demo_report.py`.
+2. Создание демонстрационной базы данных с синтетическими данными.
+3. Генерацию CSV-файлов.
+4. Формирование JSON-отчёта.
+5. Построение графика.
+6. Проверку корректности созданных файлов.
+7. Формирование итоговой сводки GitHub Actions.
 
 ### Схема CI/CD
 
 ```mermaid
 flowchart TD
-    A[Push to main] --> B[Quality CI]
+    A[Push / Pull Request] --> B[Quality CI]
+
     B --> C[Ruff]
     B --> D[Mypy]
-    B --> E[Pytest and Coverage]
-    C --> F{Quality CI passed?}
+    B --> E[Pytest + Coverage]
+
+    C --> F{All checks passed?}
     D --> F
     E --> F
-    F -->|Yes| G[Project CI]
-    F -->|No| H[Workflow failed]
-    G --> I[Generate report.csv]
-    G --> J[Generate report_chart.png]
-    I --> K[Upload project-report artifact]
-    J --> K
+
+    F -->|No| G[Workflow failed]
+    F -->|Yes| H[Project CI]
+
+    H --> I[Generate synthetic demo data]
+    I --> J[Create CSV files]
+    I --> K[Create JSON report]
+    I --> L[Generate PNG chart]
+
+    J --> M[Validate artifacts]
+    K --> M
+    L --> M
+
+    M --> N[Upload project-report]
+    N --> O[Generate Job Summary]
 ```
 
-### Артефакты
+## 📊 Демонстрационная аналитика
+
+Для демонстрации возможностей аналитической части проекта реализован отдельный сценарий:
+
+```bash
+python scripts/demo_report.py
+```
+
+Он создаёт отчёт на основе синтетических данных.
+
+Демонстрационный период составляет 7 дней.
+
+Пример результатов:
+
+| Метрика | Значение |
+|---|---:|
+| Период | 7 дней |
+| Привычки | 4 |
+| Выполнено | 21 |
+| Пропущено | 7 |
+| Выполнение | 75% |
+| Рефлексии | 7 |
+| Средняя оценка дня | 8.0/10 |
+
+### Пример статистики привычек
+
+| Привычка | Выполнено | Пропущено |
+|---|---:|---:|
+| Вода | 7 | 0 |
+| Чтение | 5 | 2 |
+| Спорт | 3 | 4 |
+| Английский | 6 | 1 |
+
+### Генерируемые артефакты
+
+После запуска создаётся директория `demo_artifacts/`.
 
 | Файл | Назначение |
-| --- | --- |
-| `report.csv` | Автоматически сформированный отчёт |
-| `report_chart.png` | Графическое представление результатов |
-| `project-report` | Артефакт, содержащий отчёт и график |
+|---|---|
+| habits.csv | Статистика привычек |
+| reflections.csv | История рефлексий |
+| report.json | Структурированный аналитический отчёт |
+| report_chart.png | График выполнения привычек |
 
-## 🛡️ How to verify CI/CD
+Данные демонстрации являются синтетическими и не содержат персональную информацию реальных пользователей.
 
-To verify the automated workflows:
+### Генерация сводки проекта
 
-1. Open the [Actions](https://github.com/ylik-mal/my-fairly-morning/actions) tab in this repository.
-2. Select the latest **Tests & Report** workflow run.
-3. Check that the **Quality CI** job has completed successfully.
-4. Review the test results, code coverage, linter results, and type-checking results in the job summary or logs.
-5. Check that the **Project CI** job has completed successfully.
-6. Scroll down to the **Artifacts** section.
-7. Download the `project-report` artifact.
+```bash
+python scripts/project_summary.py
+```
 
-The downloaded artifact contains:
+Скрипт формирует Markdown-сводку с основными метриками и статистикой привычек.
 
-- `report.csv` — an automatically generated report.
-- `report_chart.png` — a graphical representation of the report data.
+## 📁 Артефакты GitHub Actions
 
-## 🤖 AI Models & Tools Declaration
+После успешного выполнения workflow доступны два артефакта:
 
-As per the assignment requirements, AI tools were used during the development of this project.
+**quality-report**
+- Лог Ruff.
+- Лог Mypy.
+- Результаты Pytest.
+- Отчёт о покрытии.
+- JUnit XML.
 
-## 🛠️ Response to CI Findings
+**project-report**
+- habits.csv.
+- reflections.csv.
+- report.json.
+- report_chart.png.
+- demo-report.log.
 
-During the CI setup, several issues were identified and fixed:
+Срок хранения артефактов — 90 дней.
 
-- **63 linter errors** (imports, duplicates, unused variables) — fixed with `ruff`.
-- **58 mypy errors** (Optional types in aiogram) — resolved by configuring `mypy.ini`.
-- **Duplicate functions** in `start.py`, `checkins.py`, `stats.py` — removed.
-- **Missing imports** — added.
+### Как проверить CI
 
-All fixes are visible in the commit history. Final CI runs pass with **zero errors**.
+1. Откройте вкладку [Actions](https://github.com/ylik-mal/my-fairly-morning/actions).
+2. Выберите последний запуск `Tests & Report`.
+3. Проверьте успешность `Quality CI`.
+4. Проверьте успешность `Project CI`.
+5. Посмотрите итоговые сводки.
+6. Скачайте нужный артефакт в разделе Artifacts.
 
-### Tools used
+## 🤖 Использование AI-инструментов
 
-| Tool | Purpose |
-| --- | --- |
-| ChatGPT | Code assistance, explanations, refactoring, and testing support |
-| DeepSeek | Code assistance and alternative implementation suggestions |
-| ruff | Linting and code quality checks |
-| mypy | Static type checking |
-| GitHub Actions | CI/CD automation |
+В процессе разработки использовались AI-инструменты в качестве вспомогательных средств:
 
-### Self-contribution vs AI
+| Инструмент | Назначение |
+|---|---|
+| ChatGPT | Объяснение кода, помощь с тестированием и отладкой |
+| DeepSeek | Дополнительные варианты реализации и анализ |
+| Ruff | Автоматизированный анализ качества кода |
+| Mypy | Проверка типов |
+| GitHub Actions | Автоматизация проверок |
 
-While AI helped with boilerplate code, formatting, and writing some tests, the architecture, database schema, FSM dialogue logic, and CI/CD setup were designed and implemented independently.
+Предложения AI-инструментов проверялись, адаптировались и тестировались перед использованием в проекте.
 
-My personal contribution includes:
-
-- Designing the modular project architecture.
-- Designing and implementing the database schema.
-- Implementing the FSM-based reflection dialogue.
-- Configuring the CI/CD pipeline.
-- Configuring `mypy.ini`.
-- Resolving more than 60 linter errors.
-- Ensuring that the project passes all 26 automated tests.
-
-AI-generated suggestions were reviewed, adapted, and tested before being integrated into the project.
-
-**AI was used as a pair-programmer, not a replacement for independent development.**
-
-## 📖 Документация
+## 📖 Дополнительная документация
 
 | Документ | Описание |
-| --- | --- |
-| [README.md](README.md) | Основная документация проекта |
-| [ROADMAP.md](ROADMAP.md) | План развития проекта на 10 недель |
-| [PROGRESS.md](PROGRESS.md) | Трекер активности и прогресса разработки |
-| [IDEAS.md](IDEAS.md) | Идеи для дальнейшего развития |
-| [DEPLOY.md](DEPLOY.md) | Инструкция по развёртыванию на VPS |
-
-Документация функций представлена в docstrings с использованием рекомендаций PEP 257 и Google Style.
+|---|---|
+| ROADMAP.md | План развития проекта |
+| PROGRESS.md | Трекер активности |
+| IDEAS.md | Идеи для развития |
+| DEPLOY.md | Инструкция по развёртыванию |
 
 ---
 
 <p align="center">
   <b>My Fairly Morning 🌅</b>
-  <br/>
+  <br>
   Small habits. Meaningful reflections. Better days.
 </p>
