@@ -1,3 +1,6 @@
+
+from typing import TypedDict
+
 from aiogram import F, Router
 from aiogram.filters import Command
 from aiogram.types import CallbackQuery, Message
@@ -6,8 +9,13 @@ from aiogram.utils.keyboard import InlineKeyboardBuilder
 router = Router()
 
 
+class MenuSection(TypedDict):
+    title: str
+    commands: list[tuple[str, str]]
+
+
 # Структура меню: раздел → список команд
-SECTIONS = {
+SECTIONS: dict[str, MenuSection] = {
     "habits": {
         "title": "📋 Привычки",
         "commands": [
@@ -60,12 +68,14 @@ SECTIONS = {
 def main_menu_keyboard():
     """Главное меню: 6 разделов в 2 колонки."""
     builder = InlineKeyboardBuilder()
+
     for section_key, section in SECTIONS.items():
         builder.button(
             text=section["title"],
             callback_data=f"menu:{section_key}",
         )
-    builder.adjust(2)  # 2 кнопки в ряд
+
+    builder.adjust(2)
     return builder.as_markup()
 
 
@@ -96,6 +106,10 @@ async def cmd_menu(message: Message) -> None:
 
 @router.callback_query(F.data == "menu:main")
 async def back_to_main(callback: CallbackQuery) -> None:
+    if not isinstance(callback.message, Message):
+        await callback.answer("Сообщение недоступно.")
+        return
+
     await callback.message.edit_text(
         "📋 <b>Главное меню</b>\n\n"
         "Выбери раздел:",
@@ -106,19 +120,30 @@ async def back_to_main(callback: CallbackQuery) -> None:
 
 @router.callback_query(F.data.startswith("menu:"))
 async def open_section(callback: CallbackQuery) -> None:
+    if callback.data is None:
+        await callback.answer()
+        return
+
+    if not isinstance(callback.message, Message):
+        await callback.answer("Сообщение недоступно.")
+        return
+
     section_key = callback.data.split(":", 1)[1]
 
     # Если это "main" — обработается выше
     if section_key == "main":
+        await callback.answer()
         return
 
     section = SECTIONS.get(section_key)
+
     if not section:
         await callback.answer("Раздел не найден")
         return
 
     # Список команд раздела
     lines = [f"<b>{section['title']}</b>\n"]
+
     for command_title, command_text in section["commands"]:
         lines.append(f"• {command_title}: <code>{command_text}</code>")
 
@@ -132,6 +157,14 @@ async def open_section(callback: CallbackQuery) -> None:
 @router.callback_query(F.data.startswith("cmd:"))
 async def on_command_click(callback: CallbackQuery) -> None:
     """Показывает, какую команду нужно отправить."""
+    if callback.data is None:
+        await callback.answer()
+        return
+
+    if not isinstance(callback.message, Message):
+        await callback.answer("Сообщение недоступно.")
+        return
+
     command_text = callback.data.split(":", 1)[1]
 
     await callback.answer()

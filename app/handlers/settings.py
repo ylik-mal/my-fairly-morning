@@ -1,3 +1,4 @@
+
 import re
 
 from aiogram import Router
@@ -18,6 +19,9 @@ TIME_PATTERN = re.compile(r"^([01]\d|2[0-3]):([0-5]\d)$")
 
 @router.message(Command("set_morning"))
 async def cmd_set_morning(message: Message) -> None:
+    if message.text is None or message.from_user is None:
+        return
+
     parts = message.text.split(maxsplit=1)
 
     if len(parts) < 2:
@@ -48,6 +52,9 @@ async def cmd_set_morning(message: Message) -> None:
 
 @router.message(Command("morning"))
 async def cmd_morning(message: Message) -> None:
+    if message.from_user is None:
+        return
+
     current = await get_morning_time(message.from_user.id)
 
     if not current:
@@ -62,8 +69,12 @@ async def cmd_morning(message: Message) -> None:
         "Изменить: <code>/set_morning HH:MM</code>"
     )
 
+
 @router.message(Command("set_evening"))
 async def cmd_set_evening(message: Message) -> None:
+    if message.text is None or message.from_user is None:
+        return
+
     parts = message.text.split(maxsplit=1)
 
     if len(parts) < 2:
@@ -94,6 +105,9 @@ async def cmd_set_evening(message: Message) -> None:
 
 @router.message(Command("evening"))
 async def cmd_evening(message: Message) -> None:
+    if message.from_user is None:
+        return
+
     current = await get_evening_time(message.from_user.id)
 
     if not current:

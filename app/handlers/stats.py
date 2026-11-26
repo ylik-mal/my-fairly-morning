@@ -1,3 +1,4 @@
+
 from aiogram import Router
 from aiogram.filters import Command
 from aiogram.types import BufferedInputFile, Message
@@ -11,7 +12,11 @@ router = Router()
 @router.message(Command("stats"))
 async def cmd_stats(message: Message) -> None:
     """Обработчик команды /stats."""
-    stats = await get_habits_stats(message.from_user.id, days=7)
+    if message.from_user is None:
+        return
+
+    user_id = message.from_user.id
+    stats = await get_habits_stats(user_id, days=7)
 
     if not stats:
         await message.answer(
@@ -21,15 +26,12 @@ async def cmd_stats(message: Message) -> None:
         return
 
     lines = ["📊 <b>Статистика за 7 дней:</b>\n"]
-    total_done = 0
 
     for s in stats:
         title = s["title"]
         done = s["done"]
         days = s["days"]
         percent = int(done / days * 100)
-
-        total_done += done
 
         if percent >= 80:
             emoji = "🔥"
@@ -41,7 +43,7 @@ async def cmd_stats(message: Message) -> None:
             emoji = "❌"
 
         habit_id = s["id"]
-        streak = await get_habit_streak(habit_id, message.from_user.id)
+        streak = await get_habit_streak(habit_id, user_id)
         streak_str = f" — серия: {streak} дн." if streak > 0 else ""
 
         lines.append(f"{emoji} {title}: {done}/{days} ({percent}%){streak_str}")
@@ -52,6 +54,9 @@ async def cmd_stats(message: Message) -> None:
 @router.message(Command("chart"))
 async def cmd_chart(message: Message) -> None:
     """Обработчик команды /chart."""
+    if message.from_user is None:
+        return
+
     buffer = await generate_chart(message.from_user.id, days=7)
 
     if buffer is None:

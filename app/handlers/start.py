@@ -1,3 +1,4 @@
+
 from aiogram import F, Router
 from aiogram.filters import CommandStart
 from aiogram.types import CallbackQuery, Message
@@ -22,6 +23,9 @@ def welcome_keyboard():
 @router.message(CommandStart())
 async def cmd_start(message: Message) -> None:
     """Обработчик команды /start."""
+    if message.from_user is None:
+        return
+
     await get_or_create_user(
         telegram_id=message.from_user.id,
         username=message.from_user.username,
@@ -76,6 +80,10 @@ async def cmd_start(message: Message) -> None:
 @router.callback_query(F.data == "welcome:add")
 async def welcome_add(callback: CallbackQuery) -> None:
     """Обработчик кнопки 'Добавить привычку'."""
+    if not isinstance(callback.message, Message):
+        await callback.answer("Сообщение недоступно.")
+        return
+
     await callback.message.answer(
         "➕ <b>Добавить привычку</b>\n\n"
         "Напиши команду в формате:\n"
@@ -89,6 +97,10 @@ async def welcome_add(callback: CallbackQuery) -> None:
 @router.callback_query(F.data == "welcome:list")
 async def welcome_list(callback: CallbackQuery) -> None:
     """Обработчик кнопки 'Мои привычки'."""
+    if not isinstance(callback.message, Message):
+        await callback.answer("Сообщение недоступно.")
+        return
+
     habits = await get_user_habits(callback.from_user.id)
 
     if not habits:
@@ -109,6 +121,10 @@ async def welcome_list(callback: CallbackQuery) -> None:
 @router.callback_query(F.data == "welcome:help")
 async def welcome_help(callback: CallbackQuery) -> None:
     """Обработчик кнопки 'Помощь'."""
+    if not isinstance(callback.message, Message):
+        await callback.answer("Сообщение недоступно.")
+        return
+
     await callback.message.answer(
         "❓ Все команды: /help\n\n"
         "Или посмотри меню слева от поля ввода 👉"

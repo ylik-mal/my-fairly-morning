@@ -1,3 +1,4 @@
+
 from aiogram import F, Router
 from aiogram.filters import Command
 from aiogram.types import BufferedInputFile, CallbackQuery, Message
@@ -28,6 +29,10 @@ async def cmd_export(message: Message) -> None:
 
 @router.callback_query(F.data == "export:habits")
 async def export_habits(callback: CallbackQuery) -> None:
+    if not isinstance(callback.message, Message):
+        await callback.answer("Сообщение недоступно.")
+        return
+
     buffer = await generate_habits_csv(callback.from_user.id)
 
     if buffer is None:
@@ -48,6 +53,10 @@ async def export_habits(callback: CallbackQuery) -> None:
 
 @router.callback_query(F.data == "export:reflections")
 async def export_reflections(callback: CallbackQuery) -> None:
+    if not isinstance(callback.message, Message):
+        await callback.answer("Сообщение недоступно.")
+        return
+
     buffer = await generate_reflections_csv(callback.from_user.id)
 
     if buffer is None:

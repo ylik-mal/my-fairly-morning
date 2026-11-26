@@ -152,7 +152,8 @@ async def get_user_habits(telegram_id: int) -> list[tuple[int, str]]:
         "SELECT id, title FROM habits WHERE user_id = ? ORDER BY id",
         (telegram_id,),
     ) as cursor:
-        return await cursor.fetchall()
+        rows = await cursor.fetchall()
+        return [(row[0], row[1]) for row in rows]
 
 
 async def set_checkin(habit_id: int, user_id: int, status: str) -> None:
@@ -371,7 +372,8 @@ async def get_recent_reflections(
             """,
         (user_id, limit),
     ) as cursor:
-        return await cursor.fetchall()
+        rows = await cursor.fetchall()
+        return [(row[0], row[1], row[2], row[3]) for row in rows]
 
 
 async def get_habits_stats(user_id: int, days: int = 7) -> list[dict]:

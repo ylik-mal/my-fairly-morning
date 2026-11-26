@@ -8,3 +8,4 @@ pytest
 pytest-asyncio
 ruff
 pytest-cov
+mypy

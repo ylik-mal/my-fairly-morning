@@ -1,3 +1,4 @@
+
 from aiogram import F, Router
 from aiogram.filters import Command
 from aiogram.types import CallbackQuery, Message
@@ -20,6 +21,9 @@ def topics_keyboard():
 
 async def send_word(message: Message) -> None:
     """Отправляет слово дня из выбранной темы."""
+    if message.from_user is None:
+        return
+
     topic = await get_word_topic(message.from_user.id)
     word, data = get_word_of_the_day(topic)
 
@@ -51,13 +55,23 @@ async def cmd_topics(message: Message) -> None:
 
 @router.callback_query(F.data.startswith("topic:"))
 async def on_topic_select(callback: CallbackQuery) -> None:
-    topic = callback.data.split(":")[1]
+    if callback.data is None:
+        await callback.answer()
+        return
+
+    topic = callback.data.split(":", 1)[1]
+
+    if topic not in TOPICS:
+        await callback.answer("Неизвестная тема.")
+        return
+
     await set_word_topic(callback.from_user.id, topic)
 
-    topic_name = TOPICS.get(topic, topic)
+    topic_name = TOPICS[topic]
     await callback.answer(f"Тема: {topic_name}")
 
-    await callback.message.edit_text(
-        f"✅ Тема установлена: <b>{topic_name}</b>\n\n"
-        "Теперь /word будет присылать слова из этой темы."
-    )
+    if isinstance(callback.message, Message):
+        await callback.message.edit_text(
+            f"✅ Тема установлена: <b>{topic_name}</b>\n\n"
+            "Теперь /word будет присылать слова из этой темы."
+        )

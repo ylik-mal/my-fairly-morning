@@ -1,3 +1,4 @@
+
 from aiogram import Router
 from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
@@ -27,9 +28,13 @@ async def cmd_reflect(message: Message, state: FSMContext) -> None:
 
 @router.message(Reflection.waiting_rating)
 async def process_rating(message: Message, state: FSMContext) -> None:
+    if message.text is None:
+        await message.answer("Пожалуйста, введи число от 1 до 10.")
+        return
+
     text = message.text.strip()
 
-    if not text.isdigit() or not (1 <= int(text) <= 10):
+    if text not in [str(i) for i in range(1, 11)]:
         await message.answer(
             "Пожалуйста, введи число от 1 до 10."
         )
@@ -44,7 +49,12 @@ async def process_rating(message: Message, state: FSMContext) -> None:
 
 @router.message(Reflection.waiting_success)
 async def process_success(message: Message, state: FSMContext) -> None:
+    if message.text is None:
+        await message.answer("Напиши что-нибудь.")
+        return
+
     text = message.text.strip()
+
     if not text:
         await message.answer("Напиши что-нибудь.")
         return
@@ -58,12 +68,21 @@ async def process_success(message: Message, state: FSMContext) -> None:
 
 @router.message(Reflection.waiting_failure)
 async def process_failure(message: Message, state: FSMContext) -> None:
+    if message.from_user is None:
+        return
+
+    if message.text is None:
+        await message.answer("Напиши что-нибудь.")
+        return
+
     text = message.text.strip()
+
     if not text:
         await message.answer("Напиши что-нибудь.")
         return
 
     data = await state.get_data()
+
     await save_reflection(
         user_id=message.from_user.id,
         rating=data.get("rating"),
@@ -74,11 +93,18 @@ async def process_failure(message: Message, state: FSMContext) -> None:
     await state.clear()
     await message.answer(
         "✅ <b>Спасибо! Рефлексия сохранена.</b>\n\n"
-        "Посмотреть историю: /my_reflections (скоро)"
+        "Посмотреть историю: /my_reflections"
     )
+
+
 @router.message(Command("my_reflections"))
 async def cmd_my_reflections(message: Message) -> None:
-    reflections = await get_recent_reflections(message.from_user.id, limit=7)
+    if message.from_user is None:
+        return
+
+    reflections = await get_recent_reflections(
+        message.from_user.id, limit=7
+    )
 
     if not reflections:
         await message.answer(

@@ -1,3 +1,4 @@
+
 from aiogram import F, Router
 from aiogram.filters import Command
 from aiogram.types import CallbackQuery, Message
@@ -11,6 +12,9 @@ router = Router()
 @router.message(Command("add_habit"))
 async def cmd_add_habit(message: Message) -> None:
     """Добавляет новую привычку в БД."""
+    if message.text is None or message.from_user is None:
+        return
+
     parts = message.text.split(maxsplit=1)
 
     if len(parts) < 2:
@@ -33,6 +37,9 @@ async def cmd_add_habit(message: Message) -> None:
 @router.message(Command("my_habits"))
 async def cmd_my_habits(message: Message) -> None:
     """Выводит список привычек с кнопками удаления."""
+    if message.from_user is None:
+        return
+
     habits = await get_user_habits(message.from_user.id)
 
     if not habits:
@@ -46,8 +53,10 @@ async def cmd_my_habits(message: Message) -> None:
     text = "📋 <b>Твои привычки:</b>\n\n" + "\n".join(lines)
 
     builder = InlineKeyboardBuilder()
+
     for habit_id, title in habits:
         builder.button(text=f"❌ {title}", callback_data=f"del_habit:{habit_id}")
+
     builder.adjust(1)
 
     await message.answer(text, reply_markup=builder.as_markup())
@@ -56,7 +65,26 @@ async def cmd_my_habits(message: Message) -> None:
 @router.callback_query(F.data.startswith("del_habit:"))
 async def process_delete_habit(callback: CallbackQuery) -> None:
     """Удаляет привычку после нажатия на кнопку."""
-    habit_id = int(callback.data.split(":")[1])
+    if callback.data is None:
+        await callback.answer()
+        return
+
+    if not isinstance(callback.message, Message):
+        await callback.answer("Сообщение недоступно.")
+        return
+
+    try:
+        habit_id = int(callback.data.split(":", 1)[1])
+    except (ValueError, IndexError):
+        await callback.answer("Некорректный идентификатор привычки.")
+        return
+
+    habits = await get_user_habits(callback.from_user.id)
+
+    if habit_id not in [item[0] for item in habits]:
+        await callback.answer("Привычка не найдена.")
+        return
+
     await delete_habit(habit_id, callback.from_user.id)
 
     await callback.message.edit_text("✅ Привычка успешно удалена.")
@@ -66,6 +94,9 @@ async def process_delete_habit(callback: CallbackQuery) -> None:
 @router.message(Command("delete_habit"))
 async def cmd_delete_habit(message: Message) -> None:
     """Показывает список привычек для удаления (отдельная команда)."""
+    if message.from_user is None:
+        return
+
     habits = await get_user_habits(message.from_user.id)
 
     if not habits:
@@ -76,8 +107,10 @@ async def cmd_delete_habit(message: Message) -> None:
         return
 
     builder = InlineKeyboardBuilder()
+
     for habit_id, title in habits:
         builder.button(text=f"❌ {title}", callback_data=f"del_habit:{habit_id}")
+
     builder.adjust(1)
 
     await message.answer(

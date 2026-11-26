@@ -1,3 +1,4 @@
+
 from datetime import date
 
 from aiogram import F, Router
@@ -12,7 +13,11 @@ router = Router()
 
 async def send_today(message: Message) -> None:
     """Отправляет список привычек на сегодня."""
-    habits = await get_user_habits(message.from_user.id)
+    if message.from_user is None:
+        return
+
+    user_id = message.from_user.id
+    habits = await get_user_habits(user_id)
 
     if not habits:
         await message.answer(
@@ -21,7 +26,7 @@ async def send_today(message: Message) -> None:
         )
         return
 
-    checkins = await get_today_checkins(message.from_user.id)
+    checkins = await get_today_checkins(user_id)
     today = date.today().strftime("%d.%m.%Y")
     text = f"📅 <b>Привычки на {today}:</b>"
     await message.answer(text, reply_markup=habits_keyboard(habits, checkins))
@@ -36,7 +41,26 @@ async def cmd_today(message: Message) -> None:
 @router.callback_query(F.data.startswith("checkin:"))
 async def on_habit_click(callback: CallbackQuery) -> None:
     """Обработчик нажатия на привычку."""
-    habit_id = int(callback.data.split(":")[1])
+    if callback.data is None:
+        await callback.answer()
+        return
+
+    if not isinstance(callback.message, Message):
+        await callback.answer("Сообщение недоступно.")
+        return
+
+    try:
+        habit_id = int(callback.data.split(":", 1)[1])
+    except (ValueError, IndexError):
+        await callback.answer("Некорректный идентификатор привычки.")
+        return
+
+    habits = await get_user_habits(callback.from_user.id)
+
+    if habit_id not in [item[0] for item in habits]:
+        await callback.answer("Привычка не найдена.")
+        return
+
     await callback.message.edit_reply_markup(
         reply_markup=status_keyboard(habit_id)
     )
@@ -46,16 +70,42 @@ async def on_habit_click(callback: CallbackQuery) -> None:
 @router.callback_query(F.data.startswith("set:"))
 async def on_status_set(callback: CallbackQuery) -> None:
     """Обработчик выбора статуса."""
-    _, status, habit_id = callback.data.split(":")
+    if callback.data is None:
+        await callback.answer()
+        return
+
+    if not isinstance(callback.message, Message):
+        await callback.answer("Сообщение недоступно.")
+        return
+
+    try:
+        _, status, habit_id_text = callback.data.split(":")
+        habit_id = int(habit_id_text)
+    except ValueError:
+        await callback.answer("Некорректные данные.")
+        return
+
+    if status not in ("done", "skipped"):
+        await callback.answer("Некорректный статус.")
+        return
+
+    user_id = callback.from_user.id
+    habits = await get_user_habits(user_id)
+
+    if habit_id not in [item[0] for item in habits]:
+        await callback.answer("Привычка не найдена.")
+        return
+
     await set_checkin(
-        habit_id=int(habit_id),
-        user_id=callback.from_user.id,
+        habit_id=habit_id,
+        user_id=user_id,
         status=status,
     )
+
     await callback.answer(f"Отмечено: {status}")
 
-    habits = await get_user_habits(callback.from_user.id)
-    checkins = await get_today_checkins(callback.from_user.id)
+    checkins = await get_today_checkins(user_id)
+
     await callback.message.edit_reply_markup(
         reply_markup=habits_keyboard(habits, checkins)
     )
@@ -64,8 +114,14 @@ async def on_status_set(callback: CallbackQuery) -> None:
 @router.callback_query(F.data == "back:today")
 async def on_back(callback: CallbackQuery) -> None:
     """Обработчик кнопки 'Назад'."""
-    habits = await get_user_habits(callback.from_user.id)
-    checkins = await get_today_checkins(callback.from_user.id)
+    if not isinstance(callback.message, Message):
+        await callback.answer("Сообщение недоступно.")
+        return
+
+    user_id = callback.from_user.id
+    habits = await get_user_habits(user_id)
+    checkins = await get_today_checkins(user_id)
+
     await callback.message.edit_reply_markup(
         reply_markup=habits_keyboard(habits, checkins)
     )
