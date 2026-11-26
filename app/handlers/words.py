@@ -6,7 +6,6 @@ from aiogram.utils.keyboard import InlineKeyboardBuilder
 from app.database.db import get_word_topic, set_word_topic
 from app.utils.words import TOPICS, get_word_of_the_day
 
-
 router = Router()
 
 

@@ -7,7 +7,6 @@ from aiogram.types import CallbackQuery, Message
 from app.database.db import get_today_checkins, get_user_habits, set_checkin
 from app.keyboards.checkin import habits_keyboard, status_keyboard
 
-
 router = Router()
 
 
@@ -30,11 +29,13 @@ async def send_today(message: Message) -> None:
 
 @router.message(Command("today"))
 async def cmd_today(message: Message) -> None:
+    """Обработчик команды /today."""
     await send_today(message)
 
 
 @router.callback_query(F.data.startswith("checkin:"))
 async def on_habit_click(callback: CallbackQuery) -> None:
+    """Обработчик нажатия на привычку."""
     habit_id = int(callback.data.split(":")[1])
     await callback.message.edit_reply_markup(
         reply_markup=status_keyboard(habit_id)
@@ -44,6 +45,7 @@ async def on_habit_click(callback: CallbackQuery) -> None:
 
 @router.callback_query(F.data.startswith("set:"))
 async def on_status_set(callback: CallbackQuery) -> None:
+    """Обработчик выбора статуса."""
     _, status, habit_id = callback.data.split(":")
     await set_checkin(
         habit_id=int(habit_id),
@@ -61,28 +63,10 @@ async def on_status_set(callback: CallbackQuery) -> None:
 
 @router.callback_query(F.data == "back:today")
 async def on_back(callback: CallbackQuery) -> None:
+    """Обработчик кнопки 'Назад'."""
     habits = await get_user_habits(callback.from_user.id)
     checkins = await get_today_checkins(callback.from_user.id)
     await callback.message.edit_reply_markup(
         reply_markup=habits_keyboard(habits, checkins)
     )
     await callback.answer()
-
-async def send_today(message: Message) -> None:
-    """Формирует и отправляет список привычек на сегодня с инлайн-кнопками."""
-
-@router.message(Command("today"))
-async def cmd_today(message: Message) -> None:
-    """Обработчик команды /today. Вызывает send_today."""
-
-@router.callback_query(F.data.startswith("checkin:"))
-async def on_habit_click(callback: CallbackQuery) -> None:
-    """Обработчик нажатия на привычку в /today. Показывает кнопки статуса (Сделано/Пропущено)."""
-
-@router.callback_query(F.data.startswith("set:"))
-async def on_status_set(callback: CallbackQuery) -> None:
-    """Обработчик выбора статуса привычки. Сохраняет отметку в БД и обновляет меню."""
-
-@router.callback_query(F.data == "back:today")
-async def on_back(callback: CallbackQuery) -> None:
-    """Обработчик кнопки 'Назад'. Возвращает к списку привычек на сегодня."""

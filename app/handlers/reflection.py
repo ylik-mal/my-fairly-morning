@@ -6,7 +6,6 @@ from aiogram.types import Message
 
 from app.database.db import get_recent_reflections, save_reflection
 
-
 router = Router()
 
 

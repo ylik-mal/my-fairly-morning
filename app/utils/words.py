@@ -1,6 +1,5 @@
 from datetime import date
 
-
 TOPICS = {
     "emotions": "🎭 Эмоции и чувства",
     "character": "💪 Характер человека",

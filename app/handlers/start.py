@@ -5,7 +5,6 @@ from aiogram.utils.keyboard import InlineKeyboardBuilder
 
 from app.database.db import get_or_create_user, get_user_habits, is_new_user
 
-
 router = Router()
 
 
@@ -22,26 +21,12 @@ def welcome_keyboard():
 
 @router.message(CommandStart())
 async def cmd_start(message: Message) -> None:
+    """Обработчик команды /start."""
     await get_or_create_user(
         telegram_id=message.from_user.id,
         username=message.from_user.username,
         first_name=message.from_user.first_name,
     )
-@router.message(CommandStart())
-async def cmd_start(message: Message) -> None:
-    """Обработчик команды /start. Регистрирует пользователя и отправляет приветствие."""
-
-@router.callback_query(F.data == "welcome:add")
-async def welcome_add(callback: CallbackQuery) -> None:
-    """Обработчик кнопки 'Добавить привычку'. Показывает инструкцию по /add_habit."""
-
-@router.callback_query(F.data == "welcome:list")
-async def welcome_list(callback: CallbackQuery) -> None:
-    """Обработчик кнопки 'Мои привычки'. Показывает список привычек или просит добавить первую."""
-
-@router.callback_query(F.data == "welcome:help")
-async def welcome_help(callback: CallbackQuery) -> None:
-    """Обработчик кнопки 'Помощь'. Отправляет ссылку на /help и меню."""
 
     first_time = await is_new_user(message.from_user.id)
 
@@ -61,12 +46,12 @@ async def welcome_help(callback: CallbackQuery) -> None:
             "🌙 Вечером — рефлексия:\n"
             "   <code>/reflect</code> или <code>/set_evening 21:00</code>\n\n"
             "📚 <b>А ещё у меня есть:</b>\n"
-            "• /word — слово дня с синонимами и переводом\n"
-            "• /cookie — печенька с мотивацией\n"
+            "• /word — слово дня\n"
+            "• /cookie — печенька\n"
             "• /stats — статистика и серии\n"
-            "• /chart — график выполнения\n"
+            "• /chart — график\n"
             "• /export — экспорт в CSV\n"
-            "• /menu — главное меню со всеми командами\n\n"
+            "• /menu — главное меню\n\n"
             "Все команды: /help\n\n"
             "Готов начать? Жми кнопку ниже 👇"
         )
@@ -80,7 +65,7 @@ async def welcome_help(callback: CallbackQuery) -> None:
             "/delete_habit — удалить привычку\n"
             "/stats — статистика за неделю\n"
             "/word — слово дня\n"
-            "/cookie — печенька с мотивацией\n"
+            "/cookie — печенька\n"
             "/menu — главное меню\n"
             "/help — все команды"
         )
@@ -90,19 +75,20 @@ async def welcome_help(callback: CallbackQuery) -> None:
 
 @router.callback_query(F.data == "welcome:add")
 async def welcome_add(callback: CallbackQuery) -> None:
+    """Обработчик кнопки 'Добавить привычку'."""
     await callback.message.answer(
         "➕ <b>Добавить привычку</b>\n\n"
         "Напиши команду в формате:\n"
         "<code>/add_habit Название привычки</code>\n\n"
         "Например:\n"
-        "<code>/add_habit Выпить стакан воды</code>\n"
-        "<code>/add_habit Сделать зарядку</code>"
+        "<code>/add_habit Выпить стакан воды</code>"
     )
     await callback.answer()
 
 
 @router.callback_query(F.data == "welcome:list")
 async def welcome_list(callback: CallbackQuery) -> None:
+    """Обработчик кнопки 'Мои привычки'."""
     habits = await get_user_habits(callback.from_user.id)
 
     if not habits:
@@ -122,6 +108,7 @@ async def welcome_list(callback: CallbackQuery) -> None:
 
 @router.callback_query(F.data == "welcome:help")
 async def welcome_help(callback: CallbackQuery) -> None:
+    """Обработчик кнопки 'Помощь'."""
     await callback.message.answer(
         "❓ Все команды: /help\n\n"
         "Или посмотри меню слева от поля ввода 👉"

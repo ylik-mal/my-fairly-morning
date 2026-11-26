@@ -1,6 +1,5 @@
 import csv
 import io
-from datetime import date
 
 from app.database.db import (
     get_habits_stats,
@@ -28,7 +27,6 @@ async def generate_habits_csv(user_id: int) -> io.BytesIO | None:
         return None
 
     stats = await get_habits_stats(user_id, days=30)
-    today = date.today().isoformat()
 
     buffer = io.StringIO()
     writer = csv.writer(buffer)

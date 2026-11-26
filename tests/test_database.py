@@ -8,8 +8,8 @@ import pytest
 TEST_DB = os.path.join(tempfile.gettempdir(), "test_bot.db")
 os.environ["DB_PATH"] = TEST_DB
 
-from app.config import DB_PATH  # noqa: E402
-from app.database import db  # noqa: E402
+from app.config import DB_PATH
+from app.database import db
 
 
 @pytest.fixture(autouse=True)
@@ -32,10 +32,9 @@ async def test_create_user():
     await db.get_or_create_user(123, "testuser", "Test")
     await db.get_or_create_user(123, "testuser", "Test")
 
-    async with aiosqlite.connect(DB_PATH) as conn:
-        async with conn.execute("SELECT COUNT(*) FROM users") as cur:
-            row = await cur.fetchone()
-            count = row[0]
+    async with aiosqlite.connect(DB_PATH) as conn, conn.execute("SELECT COUNT(*) FROM users") as cur:
+        row = await cur.fetchone()
+        count = row[0]
 
     assert count == 1
 
@@ -121,7 +120,7 @@ async def test_save_reflection():
     reflections = await db.get_recent_reflections(123)
 
     assert len(reflections) == 1
-    date, rating, success, failure = reflections[0]
+    _date, rating, success, failure = reflections[0]
     assert rating == 8
     assert success == "Всё ок"
     assert failure == "Мало спал"
@@ -184,6 +183,7 @@ async def test_delete_habit_wrong_user():
 async def test_habit_streak():
     """Проверяет правильный расчёт серии (streak) выполнения привычки."""
     from datetime import date, timedelta
+
     import aiosqlite
 
     # 1. Подготовка: создаём пользователя и привычку

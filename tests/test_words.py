@@ -1,7 +1,5 @@
 from datetime import date, timedelta
 
-import pytest
-
 from app.utils.words import TOPICS, WORDS_BY_TOPIC, get_word_of_the_day
 
 

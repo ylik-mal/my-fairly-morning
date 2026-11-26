@@ -1,10 +1,9 @@
-from aiogram import Router, F
+from aiogram import F, Router
 from aiogram.filters import Command
-from aiogram.types import Message, CallbackQuery
+from aiogram.types import CallbackQuery, Message
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
-from app.database.db import add_habit, get_user_habits, delete_habit
-
+from app.database.db import add_habit, delete_habit, get_user_habits
 
 router = Router()
 

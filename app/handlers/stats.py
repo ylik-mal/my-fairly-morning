@@ -5,12 +5,12 @@ from aiogram.types import BufferedInputFile, Message
 from app.database.db import get_habit_streak, get_habits_stats
 from app.utils.charts import generate_chart
 
-
 router = Router()
 
 
 @router.message(Command("stats"))
 async def cmd_stats(message: Message) -> None:
+    """Обработчик команды /stats."""
     stats = await get_habits_stats(message.from_user.id, days=7)
 
     if not stats:
@@ -19,13 +19,6 @@ async def cmd_stats(message: Message) -> None:
             "Добавь первую: <code>/add_habit Выпить воды</code>"
         )
         return
-@router.message(Command("stats"))
-async def cmd_stats(message: Message) -> None:
-    """Обработчик команды /stats. Показывает статистику выполнения привычек и серии (streak)."""
-
-@router.message(Command("chart"))
-async def cmd_chart(message: Message) -> None:
-    """Обработчик команды /chart. Генерирует и отправляет график выполнения привычек."""
 
     lines = ["📊 <b>Статистика за 7 дней:</b>\n"]
     total_done = 0
@@ -38,7 +31,6 @@ async def cmd_chart(message: Message) -> None:
 
         total_done += done
 
-        # Эмодзи по проценту
         if percent >= 80:
             emoji = "🔥"
         elif percent >= 50:
@@ -48,7 +40,6 @@ async def cmd_chart(message: Message) -> None:
         else:
             emoji = "❌"
 
-        # Streak
         habit_id = s["id"]
         streak = await get_habit_streak(habit_id, message.from_user.id)
         streak_str = f" — серия: {streak} дн." if streak > 0 else ""
@@ -57,10 +48,10 @@ async def cmd_chart(message: Message) -> None:
 
     await message.answer("\n".join(lines))
 
-    
-    
+
 @router.message(Command("chart"))
 async def cmd_chart(message: Message) -> None:
+    """Обработчик команды /chart."""
     buffer = await generate_chart(message.from_user.id, days=7)
 
     if buffer is None:

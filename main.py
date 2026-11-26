@@ -9,19 +9,21 @@ from aiogram.types import BotCommand
 
 from app.config import BOT_TOKEN, PROXY
 from app.database.db import init_db
-from app.handlers import start as start_handler
-from app.handlers import habits as habits_handler
 from app.handlers import checkins as checkins_handler
-from app.handlers import settings as settings_handler
-from app.handlers import help as help_handler
-from app.handlers import reflection as reflection_handler
-from app.handlers import stats as stats_handler
-from app.handlers import words as words_handler
-from app.handlers import menu as menu_handler
 from app.handlers import cookies as cookies_handler
 from app.handlers import export as export_handler
-
+from app.handlers import habits as habits_handler
+from app.handlers import help as help_handler
+from app.handlers import menu as menu_handler
+from app.handlers import reflection as reflection_handler
+from app.handlers import settings as settings_handler
+from app.handlers import start as start_handler
+from app.handlers import stats as stats_handler
+from app.handlers import words as words_handler
 from app.scheduler.runner import start_scheduler
+
+logger = logging.getLogger(__name__)
+
 
 logging.basicConfig(
     level=logging.INFO,
@@ -75,7 +77,7 @@ async def main() -> None:
 
     start_scheduler(bot, dp)
 
-    logging.info("Бот запущен")
+    logger.info("Бот запущен")
 
     await dp.start_polling(bot)
 
@@ -84,4 +86,4 @@ if __name__ == "__main__":
     try:
         asyncio.run(main())
     except (KeyboardInterrupt, SystemExit):
-        logging.info("Бот остановлен")
+        logger.info("Бот остановлен")

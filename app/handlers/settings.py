@@ -11,7 +11,6 @@ from app.database.db import (
     set_morning_time,
 )
 
-
 router = Router()
 
 TIME_PATTERN = re.compile(r"^([01]\d|2[0-3]):([0-5]\d)$")

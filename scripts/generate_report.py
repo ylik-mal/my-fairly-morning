@@ -2,8 +2,9 @@
 Скрипт для Project CI: генерирует отчёт о состоянии проекта.
 Запускается в GitHub Actions, результат сохраняется как артефакт.
 """
-import sys
 import os
+import sys
+
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 import asyncio
@@ -30,7 +31,7 @@ async def generate_report(output_path: str = "report.csv") -> None:
         async with db.execute("SELECT COUNT(*) FROM reflections") as cur:
             reflections_count = (await cur.fetchone())[0]
 
-    with open(output_path, "w", encoding="utf-8-sig", newline="") as f:
+    with open(output_path, "w", encoding="utf-8-sig", newline="") as f:  # noqa: ASYNC230
         writer = csv.writer(f)
         writer.writerow(["Metric", "Value", "Generated at"])
         writer.writerow(["Users", users_count, date.today().isoformat()])

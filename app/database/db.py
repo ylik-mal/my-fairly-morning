@@ -1,5 +1,7 @@
+from datetime import date as date_module
+from datetime import timedelta
+
 import aiosqlite
-from datetime import date as date_module, timedelta
 
 from app.config import DB_PATH
 
@@ -146,12 +148,11 @@ async def get_user_habits(telegram_id: int) -> list[tuple[int, str]]:
     Returns:
         Список кортежей (habit_id, title), отсортированный по ID.
     """
-    async with aiosqlite.connect(DB_PATH) as db:
-        async with db.execute(
-            "SELECT id, title FROM habits WHERE user_id = ? ORDER BY id",
-            (telegram_id,),
-        ) as cursor:
-            return await cursor.fetchall()
+    async with aiosqlite.connect(DB_PATH) as db, db.execute(
+        "SELECT id, title FROM habits WHERE user_id = ? ORDER BY id",
+        (telegram_id,),
+    ) as cursor:
+        return await cursor.fetchall()
 
 
 async def set_checkin(habit_id: int, user_id: int, status: str) -> None:
@@ -190,13 +191,12 @@ async def get_today_checkins(user_id: int) -> dict[int, str]:
         Словарь {habit_id: status}, где status — "done" или "skipped".
     """
     today = date_module.today().isoformat()
-    async with aiosqlite.connect(DB_PATH) as db:
-        async with db.execute(
-            "SELECT habit_id, status FROM checkins WHERE user_id = ? AND date = ?",
-            (user_id, today),
-        ) as cursor:
-            rows = await cursor.fetchall()
-            return {habit_id: status for habit_id, status in rows}
+    async with aiosqlite.connect(DB_PATH) as db, db.execute(
+        "SELECT habit_id, status FROM checkins WHERE user_id = ? AND date = ?",
+        (user_id, today),
+    ) as cursor:
+        rows = await cursor.fetchall()
+        return {habit_id: status for habit_id, status in rows}
 
 
 async def set_morning_time(user_id: int, time_str: str) -> None:
@@ -230,13 +230,12 @@ async def get_morning_time(user_id: int) -> str | None:
     Returns:
         Время в формате "HH:MM" или None, если не настроено.
     """
-    async with aiosqlite.connect(DB_PATH) as db:
-        async with db.execute(
-            "SELECT morning_time FROM user_settings WHERE user_id = ?",
-            (user_id,),
-        ) as cursor:
-            row = await cursor.fetchone()
-            return row[0] if row else None
+    async with aiosqlite.connect(DB_PATH) as db, db.execute(
+        "SELECT morning_time FROM user_settings WHERE user_id = ?",
+        (user_id,),
+    ) as cursor:
+        row = await cursor.fetchone()
+        return row[0] if row else None
 
 
 async def get_users_with_morning_time(time_str: str) -> list[int]:
@@ -249,13 +248,12 @@ async def get_users_with_morning_time(time_str: str) -> list[int]:
     Returns:
         Список Telegram ID пользователей.
     """
-    async with aiosqlite.connect(DB_PATH) as db:
-        async with db.execute(
-            "SELECT user_id FROM user_settings WHERE morning_time = ?",
-            (time_str,),
-        ) as cursor:
-            rows = await cursor.fetchall()
-            return [row[0] for row in rows]
+    async with aiosqlite.connect(DB_PATH) as db, db.execute(
+        "SELECT user_id FROM user_settings WHERE morning_time = ?",
+        (time_str,),
+    ) as cursor:
+        rows = await cursor.fetchall()
+        return [row[0] for row in rows]
 
 
 async def set_evening_time(user_id: int, time_str: str) -> None:
@@ -289,13 +287,12 @@ async def get_evening_time(user_id: int) -> str | None:
     Returns:
         Время в формате "HH:MM" или None.
     """
-    async with aiosqlite.connect(DB_PATH) as db:
-        async with db.execute(
-            "SELECT evening_time FROM user_settings WHERE user_id = ?",
-            (user_id,),
-        ) as cursor:
-            row = await cursor.fetchone()
-            return row[0] if row else None
+    async with aiosqlite.connect(DB_PATH) as db, db.execute(
+        "SELECT evening_time FROM user_settings WHERE user_id = ?",
+        (user_id,),
+    ) as cursor:
+        row = await cursor.fetchone()
+        return row[0] if row else None
 
 
 async def get_users_with_evening_time(time_str: str) -> list[int]:
@@ -308,13 +305,12 @@ async def get_users_with_evening_time(time_str: str) -> list[int]:
     Returns:
         Список Telegram ID пользователей.
     """
-    async with aiosqlite.connect(DB_PATH) as db:
-        async with db.execute(
-            "SELECT user_id FROM user_settings WHERE evening_time = ?",
-            (time_str,),
-        ) as cursor:
-            rows = await cursor.fetchall()
-            return [row[0] for row in rows]
+    async with aiosqlite.connect(DB_PATH) as db, db.execute(
+        "SELECT user_id FROM user_settings WHERE evening_time = ?",
+        (time_str,),
+    ) as cursor:
+        rows = await cursor.fetchall()
+        return [row[0] for row in rows]
 
 
 async def save_reflection(
@@ -365,18 +361,17 @@ async def get_recent_reflections(
     Returns:
         Список кортежей (date, rating, success, failure), отсортированный по дате DESC.
     """
-    async with aiosqlite.connect(DB_PATH) as db:
-        async with db.execute(
-            """
+    async with aiosqlite.connect(DB_PATH) as db, db.execute(
+        """
             SELECT date, rating, success, failure
             FROM reflections
             WHERE user_id = ?
             ORDER BY date DESC
             LIMIT ?
             """,
-            (user_id, limit),
-        ) as cursor:
-            return await cursor.fetchall()
+        (user_id, limit),
+    ) as cursor:
+        return await cursor.fetchall()
 
 
 async def get_habits_stats(user_id: int, days: int = 7) -> list[dict]:
@@ -446,13 +441,12 @@ async def is_new_user(telegram_id: int) -> bool:
     Returns:
         True, если у пользователя ещё нет привычек, иначе False.
     """
-    async with aiosqlite.connect(DB_PATH) as db:
-        async with db.execute(
-            "SELECT COUNT(*) FROM habits WHERE user_id = ?",
-            (telegram_id,),
-        ) as cursor:
-            row = await cursor.fetchone()
-            return (row[0] if row else 0) == 0
+    async with aiosqlite.connect(DB_PATH) as db, db.execute(
+        "SELECT COUNT(*) FROM habits WHERE user_id = ?",
+        (telegram_id,),
+    ) as cursor:
+        row = await cursor.fetchone()
+        return (row[0] if row else 0) == 0
 
 
 async def set_word_topic(user_id: int, topic: str) -> None:
@@ -486,13 +480,12 @@ async def get_word_topic(user_id: int) -> str:
     Returns:
         Ключ темы. По умолчанию — "emotions".
     """
-    async with aiosqlite.connect(DB_PATH) as db:
-        async with db.execute(
-            "SELECT topic FROM user_word_topic WHERE user_id = ?",
-            (user_id,),
-        ) as cursor:
-            row = await cursor.fetchone()
-            return row[0] if row else "emotions"
+    async with aiosqlite.connect(DB_PATH) as db, db.execute(
+        "SELECT topic FROM user_word_topic WHERE user_id = ?",
+        (user_id,),
+    ) as cursor:
+        row = await cursor.fetchone()
+        return row[0] if row else "emotions"
 
 
 async def get_habit_streak(habit_id: int, user_id: int) -> int:
@@ -510,16 +503,15 @@ async def get_habit_streak(habit_id: int, user_id: int) -> int:
         Число дней подряд. 0, если привычка не выполнялась сегодня
         или вчера, либо если отметок вообще нет.
     """
-    async with aiosqlite.connect(DB_PATH) as db:
-        async with db.execute(
-            """
+    async with aiosqlite.connect(DB_PATH) as db, db.execute(
+        """
             SELECT date FROM checkins
             WHERE habit_id = ? AND user_id = ? AND status = 'done'
             ORDER BY date DESC
             """,
-            (habit_id, user_id),
-        ) as cursor:
-            dates = [row[0] for row in await cursor.fetchall()]
+        (habit_id, user_id),
+    ) as cursor:
+        dates = [row[0] for row in await cursor.fetchall()]
 
     if not dates:
         return 0

@@ -5,7 +5,6 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
 from app.scheduler.tasks import send_evening_reflection, send_morning_digest
 
-
 logger = logging.getLogger(__name__)
 
 

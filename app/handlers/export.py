@@ -5,7 +5,6 @@ from aiogram.utils.keyboard import InlineKeyboardBuilder
 
 from app.utils.csv_export import generate_habits_csv, generate_reflections_csv
 
-
 router = Router()
 
 

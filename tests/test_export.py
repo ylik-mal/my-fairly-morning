@@ -7,9 +7,9 @@ import pytest
 TEST_DB = os.path.join(tempfile.gettempdir(), "test_bot.db")
 os.environ["DB_PATH"] = TEST_DB
 
-from app.config import DB_PATH  # noqa: E402
-from app.database import db  # noqa: E402
-from app.utils.csv_export import generate_habits_csv, generate_reflections_csv  # noqa: E402
+from app.config import DB_PATH
+from app.database import db
+from app.utils.csv_export import generate_habits_csv, generate_reflections_csv
 
 
 @pytest.fixture(autouse=True)

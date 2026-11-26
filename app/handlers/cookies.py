@@ -4,7 +4,6 @@ from aiogram.types import Message
 
 from app.utils.cookies import get_random_cookie
 
-
 router = Router()
 
 

@@ -5,15 +5,18 @@ from aiogram import Bot
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.storage.base import StorageKey
 
-from app.database.db import get_today_checkins, get_user_habits, get_users_with_morning_time
-from app.keyboards.checkin import habits_keyboard
-from app.database.db import get_users_with_evening_time
-from app.database.db import get_word_topic
-from app.database.db import get_habit_streak
+from app.database.db import (
+    get_habit_streak,
+    get_today_checkins,
+    get_user_habits,
+    get_users_with_evening_time,
+    get_users_with_morning_time,
+    get_word_topic,
+)
 from app.handlers.reflection import Reflection
+from app.keyboards.checkin import habits_keyboard
 from app.utils.cookies import get_random_cookie
 from app.utils.words import get_word_of_the_day
-
 
 logger = logging.getLogger(__name__)
 
@@ -69,8 +72,8 @@ async def send_morning_digest(bot: Bot) -> None:
                 text=text,
                 reply_markup=habits_keyboard(habits, checkins),
             )
-        except Exception as e:
-            logger.exception("Ошибка отправки дайджеста для %s: %s", user_id, e)
+        except Exception:
+            logger.exception("Ошибка отправки дайджеста для %s", user_id)
 
 
 async def send_evening_reflection(bot: Bot, dp) -> None:
@@ -99,5 +102,5 @@ async def send_evening_reflection(bot: Bot, dp) -> None:
                     "Шаг 1/3: Оцени день от 1 до 10."
                 ),
             )
-        except Exception as e:
-            logger.exception("Ошибка вечерней рефлексии для %s: %s", user_id, e)
+        except Exception:
+            logger.exception("Ошибка вечерней рефлексии для %s", user_id)

@@ -1,6 +1,7 @@
 import io
 
 import matplotlib
+
 matplotlib.use("Agg")  # без GUI — работает в фоне
 import matplotlib.pyplot as plt
 
