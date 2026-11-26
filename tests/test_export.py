@@ -1,25 +1,13 @@
-import os
-import tempfile
-
 import pytest
 
-# Тестовая БД
-TEST_DB = os.path.join(tempfile.gettempdir(), "test_bot.db")
-os.environ["DB_PATH"] = TEST_DB
-
-from app.config import DB_PATH
 from app.database import db
 from app.utils.csv_export import generate_habits_csv, generate_reflections_csv
 
 
 @pytest.fixture(autouse=True)
-async def setup_db():
-    if os.path.exists(DB_PATH):
-        os.remove(DB_PATH)
-    await db.init_db()
-    yield
-    if os.path.exists(DB_PATH):
-        os.remove(DB_PATH)
+async def setup_db(isolated_db):
+    """Подготавливает отдельную тестовую БД."""
+    return isolated_db
 
 
 @pytest.mark.asyncio

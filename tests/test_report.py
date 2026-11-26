@@ -1,32 +1,57 @@
-import os
-import tempfile
+
+import csv
 
 import pytest
 
-from app.config import DB_PATH
-from app.database.db import init_db
-from scripts.generate_report import generate_report
-
 
 @pytest.mark.asyncio
-async def test_generate_report():
-    """Проверяет, что скрипт создаёт CSV с правильными заголовками."""
-    if not os.path.exists(DB_PATH):
-        await init_db()
+async def test_generate_report(
+    isolated_db, tmp_path, monkeypatch
+):
+    """Проверяет создание CSV и PNG на тестовых данных."""
+    from app.database import db
+    from scripts import generate_report
 
-    fd, temp_path = tempfile.mkstemp(suffix=".csv")
-    os.close(fd)
+    monkeypatch.setattr(
+        generate_report, "DB_PATH", str(isolated_db)
+    )
 
-    try:
-        await generate_report(output_path=temp_path)
-        assert os.path.exists(temp_path)
-        assert os.path.getsize(temp_path) > 0
+    monkeypatch.chdir(tmp_path)
 
-        with open(temp_path, "r", encoding="utf-8-sig") as f:  # noqa: ASYNC230
-            content = f.read()
-            assert "Metric,Value,Generated at" in content
-            assert "Users" in content
-            assert "Habits" in content
-    finally:
-        if os.path.exists(temp_path):
-            os.remove(temp_path)
+    await db.get_or_create_user(123, "test", "Test")
+    await db.add_habit(123, "Чтение")
+
+    report_path = tmp_path / "report.csv"
+    chart_path = tmp_path / "report_chart.png"
+
+    await generate_report.generate_report(
+        output_path=str(report_path)
+    )
+
+    assert report_path.is_file()
+    assert chart_path.is_file()
+
+    with report_path.open(
+        encoding="utf-8-sig", newline=""
+    ) as file:
+        reader = csv.DictReader(file)
+
+        assert reader.fieldnames == [
+            "Metric",
+            "Value",
+            "Generated at",
+        ]
+
+        metrics = {
+            row["Metric"]: int(row["Value"])
+            for row in reader
+        }
+
+    assert metrics == {
+        "Users": 1,
+        "Habits": 1,
+        "Check-ins": 0,
+        "Reflections": 0,
+    }
+
+    assert chart_path.read_bytes()[:8] == b"\x89PNG\r\n\x1a\n"

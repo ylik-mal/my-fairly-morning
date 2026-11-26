@@ -1,29 +1,13 @@
-import os
-import tempfile
-
 import aiosqlite
 import pytest
 
-# Тесты работают с временной БД — не трогают bot.db
-TEST_DB = os.path.join(tempfile.gettempdir(), "test_bot.db")
-os.environ["DB_PATH"] = TEST_DB
-
-from app.config import DB_PATH
 from app.database import db
 
 
 @pytest.fixture(autouse=True)
-async def setup_db():
-    """Перед каждым тестом — чистая БД, после — удаляем."""
-    if os.path.exists(DB_PATH):
-        os.remove(DB_PATH)
-
-    await db.init_db()
-
-    yield
-
-    if os.path.exists(DB_PATH):
-        os.remove(DB_PATH)
+async def setup_db(isolated_db):
+    """Подготавливает отдельную тестовую БД."""
+    return isolated_db
 
 
 @pytest.mark.asyncio
@@ -32,7 +16,7 @@ async def test_create_user():
     await db.get_or_create_user(123, "testuser", "Test")
     await db.get_or_create_user(123, "testuser", "Test")
 
-    async with aiosqlite.connect(DB_PATH) as conn, conn.execute("SELECT COUNT(*) FROM users") as cur:
+    async with aiosqlite.connect(db.DB_PATH) as conn, conn.execute("SELECT COUNT(*) FROM users") as cur:
         row = await cur.fetchone()
         count = row[0]
 
