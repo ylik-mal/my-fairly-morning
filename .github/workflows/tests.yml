@@ -1,3 +1,4 @@
+
 name: Tests & Report
 
 on:
@@ -5,72 +6,166 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
 
 jobs:
   quality-ci:
     name: Quality CI (Lint, Types, Tests)
     runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        shell: bash
+
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-          
+
       - name: Install dependencies
+        id: dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
       - name: Run linter (Ruff)
-        run: ruff check .
+        id: ruff
+        run: |
+          set -o pipefail
+          ruff check . 2>&1 | tee ruff.log
 
       - name: Run type checker (Mypy)
-        run: mypy app --ignore-missing-imports || true
+        id: mypy
+        if: ${{ !cancelled() && steps.dependencies.outcome == 'success' }}
+        run: |
+          set -o pipefail
+          mypy app 2>&1 | tee mypy.log
 
       - name: Run tests with coverage
+        id: pytest
+        if: ${{ !cancelled() && steps.dependencies.outcome == 'success' }}
         env:
           BOT_TOKEN: "test_token_for_ci"
         run: |
-          pytest -v --cov=app --cov-report=xml --cov-report=term | tee pytest.log
+          set -o pipefail
+          pytest -v \
+            --cov=app \
+            --cov-report=xml \
+            --cov-report=term-missing \
+            --junitxml=test-results.xml \
+            2>&1 | tee pytest.log
 
-      - name: Upload coverage report
+      - name: Upload quality reports
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: coverage-report
-          path: coverage.xml
+          name: quality-report
+          path: |
+            ruff.log
+            mypy.log
+            pytest.log
+            coverage.xml
+            test-results.xml
+          if-no-files-found: warn
+          retention-days: 90
 
       - name: Generate Job Summary
+        if: always()
         run: |
-          echo "## 🛡️ Quality CI Results" >> $GITHUB_STEP_SUMMARY
-          echo "✅ **Linter (Ruff):** All checks passed" >> $GITHUB_STEP_SUMMARY
-          echo "✅ **Type Checker (Mypy):** No critical errors" >> $GITHUB_STEP_SUMMARY
-          echo "✅ **Tests (Pytest):**" >> $GITHUB_STEP_SUMMARY
-          grep "passed" pytest.log >> $GITHUB_STEP_SUMMARY || true
-          echo "### 📊 Coverage Summary" >> $GITHUB_STEP_SUMMARY
-          grep "TOTAL" pytest.log >> $GITHUB_STEP_SUMMARY || true
+          {
+            echo "## 🛡️ Quality CI Results"
+            echo ""
+            echo "| Check | Result |"
+            echo "| --- | --- |"
+            echo "| Dependencies | ${{ steps.dependencies.outcome }} |"
+            echo "| Linter (Ruff) | ${{ steps.ruff.outcome }} |"
+            echo "| Type Checker (Mypy) | ${{ steps.mypy.outcome }} |"
+            echo "| Tests (Pytest) | ${{ steps.pytest.outcome }} |"
+            echo ""
+
+            if [ -f pytest.log ]; then
+              echo "### 🧪 Test Summary"
+              echo '```text'
+              tail -n 15 pytest.log
+              echo '```'
+              echo ""
+
+              echo "### 📊 Coverage Summary"
+              echo '```text'
+              grep "TOTAL" pytest.log || true
+              echo '```'
+            fi
+
+            echo ""
+            echo "### 📁 Artifacts"
+            echo "Detailed logs and reports are available in quality-report."
+          } >> "$GITHUB_STEP_SUMMARY"
 
   project-ci:
     name: Project CI (Generate Report)
     runs-on: ubuntu-latest
     needs: quality-ci
+
+    defaults:
+      run:
+        shell: bash
+
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+
       - name: Generate report
         env:
           BOT_TOKEN: "test_token_for_ci"
+          DB_PATH: "ci_demo.db"
+          MPLBACKEND: "Agg"
         run: python scripts/generate_report.py
-      - name: Upload report and chart as artifacts
+
+      - name: Verify generated artifacts
+        run: |
+          test -s report.csv
+          test -s report_chart.png
+          echo "Report and chart generated successfully."
+
+      - name: Upload report and chart
         uses: actions/upload-artifact@v4
         with:
           name: project-report
           path: |
             report.csv
             report_chart.png
+          if-no-files-found: error
+          retention-days: 90
+
+      - name: Generate Project Summary
+        if: success()
+        run: |
+          {
+            echo "## 📊 Project CI Results"
+            echo ""
+            echo "Report generation completed successfully."
+            echo ""
+            echo "| Artifact | Description |"
+            echo "| --- | --- |"
+            echo "| report.csv | Project metrics |"
+            echo "| report_chart.png | Metrics visualization |"
+            echo ""
+            echo "Download the project-report artifact to inspect the results."
+          } >> "$GITHUB_STEP_SUMMARY"
