@@ -239,24 +239,25 @@ python -m pytest -v
 python -m pytest -q --cov=app --cov-report=term-missing
 ```
 
-### Текущие результаты
 
-Последняя успешная проверка GitHub Actions — запуск для коммита `f722589`.
+### Результаты последней проверки
 
-[Посмотреть запуск Quality CI и Project CI](https://github.com/ylik-mal/my-fairly-morning/actions).
+Последний подтверждённый успешный запуск GitHub Actions выполнен **27 ноября 2026 года** для коммита `06aa212`.
+
+- [Quality CI — проверки кода, типов и тестов](https://github.com/ylik-mal/my-fairly-morning/actions/runs/45931297710/job/140284299089)
+- [Project CI — генерация и проверка аналитического отчёта](https://github.com/ylik-mal/my-fairly-morning/actions/runs/45931297710/job/140284485659)
+- [Полный запуск Tests & Report](https://github.com/ylik-mal/my-fairly-morning/actions/runs/45931297710)
 
 | Проверка | Результат |
 |---|---|
 | Ruff | Passed |
-| Mypy | Passed (28 файлов) |
+| Mypy | Passed |
 | Pytest | 236 passed |
 | Общее покрытие кода | 99% |
-| Проверенные операторы | 824 |
-| Непокрытые операторы | 1 |
 
-Все проверки Quality CI завершились успешно.
+Оба этапа завершились успешно. Project CI сформировал и проверил все четыре выходных файла: `habits.csv`, `reflections.csv`, `report.json` и `report_chart.png`.
 
-В выводе тестов присутствуют 14 предупреждений DeprecationWarning от зависимостей Matplotlib и Pyparsing. Они не приводят к ошибкам и не мешают успешному прохождению тестов.
+Подробные логи, отчёты и результаты запуска доступны в артефактах GitHub Actions.
 
 ## ⚙️ CI/CD — GitHub Actions
 
